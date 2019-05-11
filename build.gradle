@@ -1,0 +1,8 @@
+plugins {
+    id "de.undercouch.download" version "3.4.3"
+}
+
+task download(type: Download) {
+    src 'http://mattmahoney.net/dc/enwik8.zip'
+    dest "${buildDir}"
+}
