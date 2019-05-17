@@ -1,9 +1,20 @@
 plugins {
     id 'de.undercouch.download' version '3.4.3'
+    id 'com.github.edeandrea.xjc-generation' version '1.0'
 }
 
 repositories {
     mavenCentral()
+}
+
+ext.jaxbVersion = '2.2.11'
+
+dependencies {
+    xjc "javax.xml.bind:jaxb-api:$jaxbVersion"
+    xjc "com.sun.xml.bind:jaxb-impl:$jaxbVersion"
+    xjc "com.sun.xml.bind:jaxb-xjc:$jaxbVersion"
+    xjc "com.sun.xml.bind:jaxb-core:$jaxbVersion"
+    xjc 'javax.activation:activation:1.1.1'
 }
 
 task download(type: Download) {
@@ -17,4 +28,13 @@ task unzip(type: Copy) {
 
     from zipTree(zipFile)
     into outputDir
+}
+
+xjcGeneration {
+    schemas {
+        mediawiki {
+            schemaFile = 'export-0.6.xsd'
+            javaPackageName = 'org.mediawiki.xml.export'
+        }
+    }
 }
