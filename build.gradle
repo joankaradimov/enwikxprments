@@ -8,7 +8,7 @@ repositories {
     mavenCentral()
 }
 
-ext.jaxbVersion = '2.2.11'
+ext.jaxbVersion = '2.3.0'
 
 dependencies {
     xjc "javax.xml.bind:jaxb-api:$jaxbVersion"
