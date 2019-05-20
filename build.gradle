@@ -11,11 +11,11 @@ repositories {
 ext.jaxbVersion = '2.3.0'
 
 dependencies {
-    xjc "javax.xml.bind:jaxb-api:$jaxbVersion"
-    xjc "com.sun.xml.bind:jaxb-impl:$jaxbVersion"
-    xjc "com.sun.xml.bind:jaxb-xjc:$jaxbVersion"
-    xjc "com.sun.xml.bind:jaxb-core:$jaxbVersion"
-    xjc 'javax.activation:activation:1.1.1'
+    implementation "javax.xml.bind:jaxb-api:$jaxbVersion"
+    implementation "com.sun.xml.bind:jaxb-impl:$jaxbVersion"
+    implementation "com.sun.xml.bind:jaxb-xjc:$jaxbVersion"
+    implementation "com.sun.xml.bind:jaxb-core:$jaxbVersion"
+    implementation "javax.activation:activation:1.1.1"
 }
 
 task download(type: Download) {
