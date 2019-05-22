@@ -34,7 +34,7 @@ task unzip(type: Copy) {
 xjcGeneration {
     schemas {
         mediawiki {
-            schemaFile = 'export-0.6.xsd'
+            schemaFile = 'export-0.3.xsd'
             javaPackageName = 'org.mediawiki.xml.export'
         }
     }
