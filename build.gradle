@@ -1,7 +1,7 @@
 plugins {
     id 'application'
     id 'de.undercouch.download' version '3.4.3'
-    id 'com.github.edeandrea.xjc-generation' version '1.0'
+    id 'org.unbroken-dome.xjc' version '1.4.3'
     id 'java'
 }
 
@@ -12,11 +12,10 @@ repositories {
 ext.jaxbVersion = '2.3.0'
 
 dependencies {
-    implementation "javax.xml.bind:jaxb-api:$jaxbVersion"
-    implementation "com.sun.xml.bind:jaxb-impl:$jaxbVersion"
-    implementation "com.sun.xml.bind:jaxb-xjc:$jaxbVersion"
-    implementation "com.sun.xml.bind:jaxb-core:$jaxbVersion"
-    implementation "javax.activation:activation:1.1.1"
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: jaxbVersion
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: jaxbVersion
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-core', version: jaxbVersion
+    implementation group: 'javax.activation', name: 'activation', version: '1.1.1'
 }
 
 application {
@@ -36,11 +35,6 @@ task unzip(type: Copy) {
     into outputDir
 }
 
-xjcGeneration {
-    schemas {
-        mediawiki {
-            schemaFile = 'export-0.3.xsd'
-            javaPackageName = 'org.mediawiki.xml.export'
-        }
-    }
+xjcGenerate {
+    targetPackage = 'org.mediawiki.xml.export'
 }
