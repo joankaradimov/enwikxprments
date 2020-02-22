@@ -25,6 +25,7 @@ application {
 task download(type: Download) {
     src 'http://mattmahoney.net/dc/enwik8.zip'
     dest buildDir
+    overwrite false
 }
 
 task unzip(type: Copy) {
