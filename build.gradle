@@ -28,7 +28,7 @@ task download(type: Download) {
     overwrite false
 }
 
-task unzip(type: Copy) {
+task unzip(type: Copy, dependsOn: ':download') {
     def zipFile = file("${buildDir}/enwik8.zip")
     def outputDir = file(buildDir)
 
@@ -39,3 +39,5 @@ task unzip(type: Copy) {
 xjcGenerate {
     targetPackage = 'org.mediawiki.xml.export'
 }
+
+run.dependsOn(unzip)
