@@ -30,9 +30,9 @@ public class Main {
 
             Path outputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\main\\resources");
 
-            try (PrintStream pagesStream = new PrintStream(outputDirectory.resolve("pages.hpp").toFile(), StandardCharsets.UTF_8);
-                 PrintStream revisionsStream = new PrintStream(outputDirectory.resolve("revisions.hpp").toFile(), StandardCharsets.UTF_8);
-                 PrintStream contributorsStream = new PrintStream(outputDirectory.resolve("contributors.hpp").toFile(), StandardCharsets.UTF_8)) {
+            try (PrintStream pagesStream = createCppPrintStream(outputDirectory, "pages.hpp");
+                 PrintStream revisionsStream = createCppPrintStream(outputDirectory, "revisions.hpp");
+                 PrintStream contributorsStream = createCppPrintStream(outputDirectory, "contributors.hpp")) {
 
                 pagesStream.printf("Page pages[] = {\n");
                 Set<BigInteger> contributorIds = new HashSet<>();
@@ -79,6 +79,10 @@ public class Main {
         } catch (IOException | JAXBException e) {
             e.printStackTrace();
         }
+    }
+
+    private static PrintStream createCppPrintStream(Path outputDirectory, String filename) throws IOException {
+        return new PrintStream(outputDirectory.resolve(filename).toFile(), StandardCharsets.UTF_8);
     }
 
     private static String escapeString(String string) {
