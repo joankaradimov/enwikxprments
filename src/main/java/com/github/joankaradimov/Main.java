@@ -81,9 +81,10 @@ public class Main {
                                 escapeString(revision.getText().getValue()));
 
                         pagesStream.printf(
-                                "  Page(%s, %d, revision_%d),\n",
+                                "  Page(%s, %d, %s, revision_%d),\n",
                                 escapeString(page.getTitle()),
                                 page.getId(),
+                                escapeString(page.getRestrictions()),
                                 revision.getId());
                     }
                 }
