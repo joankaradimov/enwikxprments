@@ -36,6 +36,7 @@ public class Main {
 
                 pagesStream.printf("const Page pages[] = {\n");
                 Set<BigInteger> contributorIds = new HashSet<>();
+                Set<String> contributorIps = new HashSet<>();
 
                 for (PageType page : mediaWiki.getPage()) {
                     List<Object> revisionOrUpload = page.getRevisionOrUpload();
@@ -48,21 +49,33 @@ public class Main {
                         RevisionType revision = (RevisionType) revisionOrUpload.get(0);
                         ContributorType contributor = revision.getContributor();
 
-                        if (!contributorIds.contains(contributor.getId())) {
-                            contributorIds.add(contributor.getId());
-                            contributorsStream.printf(
-                                    "const Contributor contributor_%d = {%d, %s};\n",
-                                    contributor.getId(),
-                                    contributor.getId() != null ? contributor.getId() : -1, // properly handle contributors without ID
-                                    contributor.getUsername() != null ? escapeString(contributor.getUsername()) : "\"\"");
+                        if (contributor.getId() != null) {
+                            if (!contributorIds.contains(contributor.getId())) {
+                                contributorIds.add(contributor.getId());
+                                contributorsStream.printf(
+                                        "const Contributor contributor_%d = {%d, USER, %s};\n",
+                                        contributor.getId(),
+                                        contributor.getId(), // properly handle contributors without ID
+                                        escapeString(contributor.getUsername()));
+                            }
+                        } else if (contributor.getIp() != null) {
+                            if (!contributorIps.contains(contributor.getIp())) {
+                                contributorIps.add(contributor.getIp());
+                                contributorsStream.printf(
+                                        "const Contributor contributor_%s = {0, IP, %s};\n",
+                                        contributor.getIp().replaceAll("(\\.|\\s)", "_"),
+                                        escapeString(contributor.getIp()));
+                            }
+                        } else {
+                            throw new RuntimeException("Contributor expected to have either an IP or an ID");
                         }
 
                         revisionsStream.printf(
-                                "const Revision revision_%d(%d, %d, contributor_%d, %s, %s, %s);\n",
+                                "const Revision revision_%d(%d, %d, contributor_%s, %s, %s, %s);\n",
                                 revision.getId(),
                                 revision.getId(),
                                 revision.getTimestamp().toGregorianCalendar().getTimeInMillis() / 1000,
-                                contributor.getId(),
+                                contributor.getId() != null ? contributor.getId() : contributor.getIp().replaceAll("(\\.|\\s)", "_"),
                                 revision.getMinor() != null ? "true" : "false",
                                 escapeString(revision.getComment()),
                                 escapeString(revision.getText().getValue()));
