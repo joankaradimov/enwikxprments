@@ -49,7 +49,7 @@ int main() {
     writer.closeTag();
     writer.closeTag();
 
-    for (Page& page : pages) {
+    for (const Page& page : pages) {
         page.write(writer);
     }
     writer.closeTag();

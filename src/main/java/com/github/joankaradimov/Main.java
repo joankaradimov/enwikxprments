@@ -34,7 +34,7 @@ public class Main {
                  PrintStream revisionsStream = createCppPrintStream(outputDirectory, "revisions.hpp");
                  PrintStream contributorsStream = createCppPrintStream(outputDirectory, "contributors.hpp")) {
 
-                pagesStream.printf("Page pages[] = {\n");
+                pagesStream.printf("const Page pages[] = {\n");
                 Set<BigInteger> contributorIds = new HashSet<>();
 
                 for (PageType page : mediaWiki.getPage()) {
@@ -51,14 +51,14 @@ public class Main {
                         if (!contributorIds.contains(contributor.getId())) {
                             contributorIds.add(contributor.getId());
                             contributorsStream.printf(
-                                    "Contributor contributor_%d(%d, %s);\n",
+                                    "const Contributor contributor_%d(%d, %s);\n",
                                     contributor.getId(),
                                     contributor.getId() != null ? contributor.getId() : -1, // properly handle contributors without ID
                                     escapeString(contributor.getUsername()));
                         }
 
                         revisionsStream.printf(
-                                "Revision revision_%d(%d, %d, contributor_%d, %s, %s, %s);\n",
+                                "const Revision revision_%d(%d, %d, contributor_%d, %s, %s, %s);\n",
                                 revision.getId(),
                                 revision.getId(),
                                 revision.getTimestamp().toGregorianCalendar().getTimeInMillis() / 1000,

@@ -12,7 +12,7 @@
 
 class Revision {
 public:
-    Revision(int id, time_t timestamp, Contributor& contributor, bool minor, const char* comment, const char* text): id(id), timestamp(timestamp), contributor(contributor), minor(minor), comment(comment), text(text) {
+    Revision(int id, time_t timestamp, const Contributor& contributor, bool minor, const char* comment, const char* text): id(id), timestamp(timestamp), contributor(contributor), minor(minor), comment(comment), text(text) {
     }
 
     void write(XmlWriter xmlWriter) const {
