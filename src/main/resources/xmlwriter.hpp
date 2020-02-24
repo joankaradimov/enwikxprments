@@ -4,14 +4,33 @@
 #include <time.h>
 #include <stack>
 
+class XmlAttribute {
+public:
+    XmlAttribute(const char* name, const char* value): name(name), value(value) {
+    }
+
+    const char* getName() const {
+        return name;
+    }
+
+    const char* getValue() const {
+        return value;
+    }
+
+private:
+
+    const char* name;
+    const char* value;
+};
+
 class XmlWriter {
 public:
     XmlWriter(FILE* output): output(output), indentation(0) {
     }
 
-    void openTag(const char* tagName) {
+    void openTag(const char* tagName, std::initializer_list<XmlAttribute> attributes = {}) {
         writeIndentation();
-        writeOpeningTag(tagName);
+        writeOpeningTag(tagName, attributes);
         writeNewLine();
         indentation += 2;
     }
@@ -23,9 +42,13 @@ public:
         writeNewLine();
     }
 
-    void writeTag(const char* tagName) {
+    void writeTag(const char* tagName, std::initializer_list<XmlAttribute> attributes = {}) {
         writeIndentation();
-        fprintf(output, "<%s />", tagName);
+        fprintf(output, "<%s", tagName);
+        for (auto& attribute : attributes) {
+            fprintf(output, " %s=\"%s\"", attribute.getName(), attribute.getValue());
+        }
+        fprintf(output, " />", tagName);
         writeNewLine();
     }
 
@@ -37,9 +60,9 @@ public:
         writeNewLine();
     }
 
-    void writeTag(const char* tagName, const char* string) {
+    void writeTag(const char* tagName, const char* string, std::initializer_list<XmlAttribute> attributes = {}) {
         writeIndentation();
-        writeOpeningTag(tagName);
+        writeOpeningTag(tagName, attributes);
         fputs(string, output);
         writeClosingTag();
         writeNewLine();
@@ -67,9 +90,13 @@ private:
     int indentation;
     std::stack<const char*> tags;
 
-    void writeOpeningTag(const char* tagName) {
+    void writeOpeningTag(const char* tagName, std::initializer_list<XmlAttribute> attributes = {}) {
         tags.push(tagName);
-        fprintf(output, "<%s>", tagName);
+        fprintf(output, "<%s", tagName);
+        for (auto& attribute : attributes) {
+            fprintf(output, " %s=\"%s\"", attribute.getName(), attribute.getValue());
+        }
+        fprintf(output, ">", tagName);
     }
 
     void writeClosingTag() {

@@ -26,7 +26,7 @@ public:
         if (comment) {
             xmlWriter.writeTag("comment", comment);
         }
-        xmlWriter.writeTag("text", text);
+        xmlWriter.writeTag("text", text, {XmlAttribute("xml:space", "preserve")});
         xmlWriter.closeTag();
     }
 
