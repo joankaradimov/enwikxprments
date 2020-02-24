@@ -7,8 +7,6 @@
 #include "revisions.hpp"
 #include "pages.hpp"
 
-extern Page pages[];
-
 int main() {
     XmlWriter writer(stdout);
 
