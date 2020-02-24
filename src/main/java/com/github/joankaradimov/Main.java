@@ -51,10 +51,10 @@ public class Main {
                         if (!contributorIds.contains(contributor.getId())) {
                             contributorIds.add(contributor.getId());
                             contributorsStream.printf(
-                                    "const Contributor contributor_%d(%d, %s);\n",
+                                    "const Contributor contributor_%d = {%d, %s};\n",
                                     contributor.getId(),
                                     contributor.getId() != null ? contributor.getId() : -1, // properly handle contributors without ID
-                                    escapeString(contributor.getUsername()));
+                                    contributor.getUsername() != null ? escapeString(contributor.getUsername()) : "\"\"");
                         }
 
                         revisionsStream.printf(

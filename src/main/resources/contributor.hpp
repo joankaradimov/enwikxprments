@@ -2,11 +2,7 @@
 
 #include "xmlwriter.hpp"
 
-class Contributor {
-public:
-    Contributor(int id, const char* username): id(id), username(username) {
-    }
-
+struct Contributor {
     void write(XmlWriter xmlWriter) const {
         xmlWriter.openTag("contributor");
         if (username) {
@@ -18,8 +14,6 @@ public:
         xmlWriter.closeTag();
     }
 
-private:
-
-    const char* username;
     const int id;
+    const char username[];
 };
