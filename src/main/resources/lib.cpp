@@ -23,6 +23,7 @@ int main() {
     writer.writeTag("base", "http://en.wikipedia.org/wiki/Main_Page");
     writer.writeTag("generator", "MediaWiki 1.6alpha");
     writer.writeTag("case", "first-letter");
+    writer.printf("  "); // This is a special case in the enwik dataset
     writer.openTag("namespaces");
     writer.writeTag("namespace", "Media", {XmlAttribute("key", "-2")});
     writer.writeTag("namespace", "Special", {XmlAttribute("key", "-1")});
