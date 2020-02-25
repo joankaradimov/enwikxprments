@@ -43,16 +43,6 @@ public:
         writeNewLine();
     }
 
-    void writeTag(const char* tagName, std::initializer_list<XmlAttribute> attributes = {}) {
-        writeIndentation();
-        printf("<%s", tagName);
-        for (auto& attribute : attributes) {
-            printf(" %s=\"%s\"", attribute.getName(), attribute.getValue());
-        }
-        printf(" />", tagName);
-        writeNewLine();
-    }
-
     void writeTag(const char* tagName, int number) {
         writeIndentation();
         writeOpeningTag(tagName);
@@ -63,9 +53,17 @@ public:
 
     void writeTag(const char* tagName, const char* string, std::initializer_list<XmlAttribute> attributes = {}) {
         writeIndentation();
-        writeOpeningTag(tagName, attributes);
-        printf("%s", string);
-        writeClosingTag();
+        if (*string) {
+            writeOpeningTag(tagName, attributes);
+            printf("%s", string);
+            writeClosingTag();
+        } else {
+            printf("<%s", tagName);
+            for (auto& attribute : attributes) {
+                printf(" %s=\"%s\"", attribute.getName(), attribute.getValue());
+            }
+            printf(" />", tagName);
+        }
         writeNewLine();
     }
 

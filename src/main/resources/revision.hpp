@@ -21,7 +21,7 @@ public:
         xmlWriter.writeTag("timestamp", timestamp);
         contributor.write(xmlWriter);
         if (minor) {
-            xmlWriter.writeTag("minor");
+            xmlWriter.writeTag("minor", "");
         }
         if (comment) {
             xmlWriter.writeTag("comment", comment);

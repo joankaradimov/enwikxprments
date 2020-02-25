@@ -26,7 +26,7 @@ int main() {
     writer.openTag("namespaces");
     writer.writeTag("namespace", "Media", {XmlAttribute("key", "-2")});
     writer.writeTag("namespace", "Special", {XmlAttribute("key", "-1")});
-    writer.writeTag("namespace", {XmlAttribute("key", "0")});
+    writer.writeTag("namespace", "", {XmlAttribute("key", "0")});
     writer.writeTag("namespace", "Talk", {XmlAttribute("key", "1")});
     writer.writeTag("namespace", "User", {XmlAttribute("key", "2")});
     writer.writeTag("namespace", "User talk", {XmlAttribute("key", "3")});
