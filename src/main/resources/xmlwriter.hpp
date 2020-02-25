@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <time.h>
 #include <stack>
@@ -44,18 +45,18 @@ public:
 
     void writeTag(const char* tagName, std::initializer_list<XmlAttribute> attributes = {}) {
         writeIndentation();
-        fprintf(output, "<%s", tagName);
+        printf("<%s", tagName);
         for (auto& attribute : attributes) {
-            fprintf(output, " %s=\"%s\"", attribute.getName(), attribute.getValue());
+            printf(" %s=\"%s\"", attribute.getName(), attribute.getValue());
         }
-        fprintf(output, " />", tagName);
+        printf(" />", tagName);
         writeNewLine();
     }
 
     void writeTag(const char* tagName, int number) {
         writeIndentation();
         writeOpeningTag(tagName);
-        fprintf(output, "%d", number);
+        printf("%d", number);
         writeClosingTag();
         writeNewLine();
     }
@@ -63,7 +64,7 @@ public:
     void writeTag(const char* tagName, const char* string, std::initializer_list<XmlAttribute> attributes = {}) {
         writeIndentation();
         writeOpeningTag(tagName, attributes);
-        fputs(string, output);
+        printf("%s", string);
         writeClosingTag();
         writeNewLine();
     }
@@ -74,7 +75,7 @@ public:
         writeIndentation();
 
         writeOpeningTag(tagName);
-        fprintf(output, "%d-%02d-%02dT%02d:%02d:%02dZ",
+        printf("%d-%02d-%02dT%02d:%02d:%02dZ",
             1900 + time_breakdown.tm_year,
             1 + time_breakdown.tm_mon,
             time_breakdown.tm_mday,
@@ -85,6 +86,14 @@ public:
         writeClosingTag();
         writeNewLine();
     }
+
+    int printf(const char* format, ...) {
+        va_list arglist;
+        va_start(arglist, format);
+        int result = vfprintf(output, format, arglist);
+        va_end(arglist);
+        return result;
+    }
 private:
     FILE* output;
     int indentation;
@@ -92,23 +101,23 @@ private:
 
     void writeOpeningTag(const char* tagName, std::initializer_list<XmlAttribute> attributes = {}) {
         tags.push(tagName);
-        fprintf(output, "<%s", tagName);
+        printf("<%s", tagName);
         for (auto& attribute : attributes) {
-            fprintf(output, " %s=\"%s\"", attribute.getName(), attribute.getValue());
+            printf(" %s=\"%s\"", attribute.getName(), attribute.getValue());
         }
-        fprintf(output, ">", tagName);
+        printf(">", tagName);
     }
 
     void writeClosingTag() {
-        fprintf(output, "</%s>", tags.top());
+        printf("</%s>", tags.top());
         tags.pop();
     }
 
     void writeIndentation() {
-        fprintf(output, "%*s", indentation, "");
+        printf("%*s", indentation, "");
     }
 
     void writeNewLine() {
-        fprintf(output, "\n");
+        printf("\n");
     }
 };
