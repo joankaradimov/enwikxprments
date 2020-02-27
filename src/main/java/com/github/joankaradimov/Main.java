@@ -28,7 +28,7 @@ public class Main {
             JAXBElement element = (JAXBElement) jaxbUnmarshaller.unmarshal(validXmlStream);
             MediaWikiType mediaWiki = (MediaWikiType) element.getValue();
 
-            Path outputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\main\\resources");
+            Path outputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\cpp");
 
             try (PrintStream pagesStream = createCppPrintStream(outputDirectory, "pages.hpp");
                  PrintStream revisionsStream = createCppPrintStream(outputDirectory, "revisions.hpp");
