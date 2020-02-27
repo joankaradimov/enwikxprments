@@ -34,7 +34,16 @@ public class Main {
                  PrintStream revisionsStream = createCppPrintStream(outputDirectory, "revisions.hpp");
                  PrintStream contributorsStream = createCppPrintStream(outputDirectory, "contributors.hpp")) {
 
+                pagesStream.printf("#pragma once\n\n");
+                pagesStream.printf("#include \"page.hpp\"\n");
+                pagesStream.printf("#include \"revisions.hpp\"\n\n");
                 pagesStream.printf("const Page pages[] = {\n");
+                revisionsStream.printf("#pragma once\n\n");
+                revisionsStream.printf("#include \"revision.hpp\"\n");
+                revisionsStream.printf("#include \"contributors.hpp\"\n\n");
+                contributorsStream.printf("#pragma once\n\n");
+                contributorsStream.printf("#include \"contributor.hpp\"\n\n");
+
                 Set<BigInteger> contributorIds = new HashSet<>();
                 Set<String> contributorIps = new HashSet<>();
 
