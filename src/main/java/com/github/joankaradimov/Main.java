@@ -13,6 +13,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,6 +47,8 @@ public class Main {
 
                 Set<BigInteger> contributorIds = new HashSet<>();
                 Set<String> contributorIps = new HashSet<>();
+                Set<String> dictionary = new HashSet<>();
+                int wordCount = 0;
 
                 for (PageType page : mediaWiki.getPage()) {
                     List<Object> revisionOrUpload = page.getRevisionOrUpload();
@@ -95,13 +98,67 @@ public class Main {
                                 page.getId(),
                                 escapeString(page.getRestrictions()),
                                 revision.getId());
+
+                        var tokens = tokenize(revision.getText().getValue());
+                        wordCount += tokens.size();
+                        dictionary.addAll(tokens);
                     }
                 }
                 pagesStream.printf("};");
+
+                System.out.print("DICTIONARY SIZE: ");
+                System.out.println(dictionary.size());
+
+                System.out.print("WORD COUNT: ");
+                System.out.println(wordCount);
             }
         } catch (IOException | JAXBException e) {
             e.printStackTrace();
         }
+    }
+
+    private static enum TokenType {
+        ALPHABETIC,
+        NUMERIC,
+        OTHER,
+    }
+
+    private static List<String> tokenize(String text) {
+        List<String> result = new ArrayList<>();
+        StringBuilder token = new StringBuilder();
+        TokenType tokenType= TokenType.OTHER;
+
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (Character.isLetter(c)) {
+                if (token.length() == 0) {
+                    tokenType = TokenType.ALPHABETIC;
+                } else if (tokenType != TokenType.ALPHABETIC) {
+                    result.add(token.toString());
+                    token.setLength(0);
+                }
+                token.append(c);
+            } else if (Character.isDigit(c)) {
+                if (token.length() == 0) {
+                    tokenType = TokenType.NUMERIC;
+                } else if (tokenType != TokenType.NUMERIC) {
+                    result.add(token.toString());
+                    token.setLength(0);
+                }
+                token.append(c);
+            } else {
+                if (token.length() != 0) {
+                    result.add(token.toString());
+                    token.setLength(0);
+                }
+                result.add(Character.toString(c));
+            }
+        }
+        if (token.length() != 0) {
+            result.add(token.toString());
+        }
+
+        return result;
     }
 
     private static PrintStream createCppPrintStream(Path outputDirectory, String filename) throws IOException {
