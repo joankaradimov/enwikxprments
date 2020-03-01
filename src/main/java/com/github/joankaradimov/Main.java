@@ -35,15 +35,21 @@ public class Main {
                  PrintStream revisionsStream = createCppPrintStream(outputDirectory, "revisions.hpp");
                  PrintStream contributorsStream = createCppPrintStream(outputDirectory, "contributors.hpp")) {
 
-                pagesStream.printf("#pragma once\n\n");
-                pagesStream.printf("#include \"page.hpp\"\n");
-                pagesStream.printf("#include \"revisions.hpp\"\n\n");
-                pagesStream.printf("const Page pages[] = {\n");
-                revisionsStream.printf("#pragma once\n\n");
-                revisionsStream.printf("#include \"revision.hpp\"\n");
-                revisionsStream.printf("#include \"contributors.hpp\"\n\n");
-                contributorsStream.printf("#pragma once\n\n");
-                contributorsStream.printf("#include \"contributor.hpp\"\n\n");
+                pagesStream.println("#pragma once");
+                pagesStream.println();
+                pagesStream.println("#include \"page.hpp\"");
+                pagesStream.println("#include \"revisions.hpp\"");
+                pagesStream.println();
+                pagesStream.println("const Page pages[] = {");
+                revisionsStream.println("#pragma once");
+                revisionsStream.println();
+                revisionsStream.println("#include \"revision.hpp\"");
+                revisionsStream.println("#include \"contributors.hpp\"");
+                revisionsStream.println();
+                contributorsStream.println("#pragma once");
+                contributorsStream.println();
+                contributorsStream.println("#include \"contributor.hpp\"");
+                contributorsStream.println();
 
                 Set<BigInteger> contributorIds = new HashSet<>();
                 Set<String> contributorIps = new HashSet<>();
@@ -104,7 +110,7 @@ public class Main {
                         dictionary.addAll(tokens);
                     }
                 }
-                pagesStream.printf("};");
+                pagesStream.println("};");
 
                 System.out.print("DICTIONARY SIZE: ");
                 System.out.println(dictionary.size());
