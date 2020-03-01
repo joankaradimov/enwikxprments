@@ -19,7 +19,7 @@ import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        try (FileInputStream stream = new FileInputStream("build/enwik8")) {
+        try (FileInputStream stream = new FileInputStream("build/enwik9")) {
             ByteArrayInputStream xmlClosingElements = new ByteArrayInputStream("</text></revision></page></mediawiki>".getBytes());
             SequenceInputStream validXmlStream = new SequenceInputStream(stream, xmlClosingElements);
 

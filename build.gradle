@@ -24,13 +24,13 @@ application {
 }
 
 task download(type: Download) {
-    src 'http://mattmahoney.net/dc/enwik8.zip'
+    src 'http://mattmahoney.net/dc/enwik9.zip'
     dest buildDir
     overwrite false
 }
 
 task unzip(type: Copy, dependsOn: ':download') {
-    def zipFile = file("${buildDir}/enwik8.zip")
+    def zipFile = file("${buildDir}/enwik9.zip")
     def outputDir = file(buildDir)
 
     from zipTree(zipFile)
