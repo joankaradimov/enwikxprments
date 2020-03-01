@@ -51,7 +51,7 @@ public:
         writeNewLine();
     }
 
-    void writeTag(const char* tagName, const char* string, std::initializer_list<XmlAttribute> attributes = {}) {
+    void writeTag(const char* tagName, const char* string, const std::initializer_list<XmlAttribute>& attributes = {}) {
         writeIndentation();
         if (*string) {
             writeOpeningTag(tagName, attributes);
@@ -59,9 +59,7 @@ public:
             writeClosingTag();
         } else {
             printf("<%s", tagName);
-            for (auto& attribute : attributes) {
-                printf(" %s=\"%s\"", attribute.getName(), attribute.getValue());
-            }
+            writeAttributes(attributes);
             printf(" />", tagName);
         }
         writeNewLine();
@@ -97,13 +95,17 @@ private:
     int indentation;
     std::stack<const char*> tags;
 
-    void writeOpeningTag(const char* tagName, std::initializer_list<XmlAttribute> attributes = {}) {
+    void writeOpeningTag(const char* tagName, const std::initializer_list<XmlAttribute>& attributes = {}) {
         tags.push(tagName);
         printf("<%s", tagName);
+        writeAttributes(attributes);
+        printf(">", tagName);
+    }
+
+    void writeAttributes(const std::initializer_list<XmlAttribute>& attributes = {}) {
         for (auto& attribute : attributes) {
             printf(" %s=\"%s\"", attribute.getName(), attribute.getValue());
         }
-        printf(">", tagName);
     }
 
     void writeClosingTag() {
