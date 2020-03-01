@@ -69,7 +69,7 @@ public:
 
     void writeTag(const char* tagName, time_t time) {
         tm time_breakdown;
-        gmtime_r(&time, &time_breakdown);
+        gmtime_s(&time_breakdown, &time);
         writeIndentation();
 
         writeOpeningTag(tagName);
