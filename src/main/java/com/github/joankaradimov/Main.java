@@ -13,10 +13,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -30,10 +27,10 @@ public class Main {
             MediaWikiType mediaWiki = element.getValue();
 
             Path outputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\cpp");
+            Path dataOutputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data");
 
             try (PrintStream pagesStream = createCppPrintStream(outputDirectory, "pages.hpp");
-                 PrintStream revisionsStream = createCppPrintStream(outputDirectory, "revisions.hpp");
-                 PrintStream contributorsStream = createCppPrintStream(outputDirectory, "contributors.hpp")) {
+                 PrintStream revisionsStream = createCppPrintStream(outputDirectory, "revisions.hpp")) {
 
                 pagesStream.println("#pragma once");
                 pagesStream.println();
@@ -44,17 +41,13 @@ public class Main {
                 revisionsStream.println("#pragma once");
                 revisionsStream.println();
                 revisionsStream.println("#include \"revision.hpp\"");
-                revisionsStream.println("#include \"contributors.hpp\"");
                 revisionsStream.println();
-                contributorsStream.println("#pragma once");
-                contributorsStream.println();
-                contributorsStream.println("#include \"contributor.hpp\"");
-                contributorsStream.println();
 
-                Set<BigInteger> contributorIds = new HashSet<>();
-                Set<String> contributorIps = new HashSet<>();
-                Set<String> dictionary = new HashSet<>();
+                Map<String, Integer> dictionary = new HashMap<>();
+                List<List<String>> tokensList = new ArrayList<>();
                 int wordCount = 0;
+                ContributorsWithUsername contributorsWithUsername = new ContributorsWithUsername();
+                ContributorsWithIp contributorsWithIp = new ContributorsWithIp();
 
                 for (PageType page : mediaWiki.getPage()) {
                     List<Object> revisionOrUpload = page.getRevisionOrUpload();
@@ -68,32 +61,47 @@ public class Main {
                         ContributorType contributor = revision.getContributor();
 
                         if (contributor.getId() != null) {
-                            if (!contributorIds.contains(contributor.getId())) {
-                                contributorIds.add(contributor.getId());
-                                contributorsStream.printf(
-                                        "const Contributor contributor_%d = {%d, USER, %s};\n",
-                                        contributor.getId(),
-                                        contributor.getId(), // properly handle contributors without ID
-                                        escapeString(contributor.getUsername()));
-                            }
+                            // TODO: check for int overflow
+                            var c = new ContributorsWithUsername.Contributor(contributor.getId().intValue(), contributor.getUsername());
+                            contributorsWithUsername.add(c);
                         } else if (contributor.getIp() != null) {
-                            if (!contributorIps.contains(contributor.getIp())) {
-                                contributorIps.add(contributor.getIp());
-                                contributorsStream.printf(
-                                        "const Contributor contributor_%s = {0, IP, %s};\n",
-                                        contributor.getIp().replaceAll("(\\.|\\s)", "_"),
-                                        escapeString(contributor.getIp()));
-                            }
+                            var c = new ContributorsWithIp.Contributor(contributor.getIp());
+                            contributorsWithIp.add(c);
+                        } else {
+                            throw new RuntimeException("Contributor expected to have either an IP or an ID");
+                        }
+                    }
+                }
+
+                for (PageType page : mediaWiki.getPage()) {
+                    List<Object> revisionOrUpload = page.getRevisionOrUpload();
+
+                    if (revisionOrUpload.size() != 1) {
+                        throw new RuntimeException("Expected exactly one revision or upload");
+                    }
+
+                    if (revisionOrUpload.get(0) instanceof RevisionType) {
+                        RevisionType revision = (RevisionType) revisionOrUpload.get(0);
+                        ContributorType contributor = revision.getContributor();
+                        int index;
+
+                        if (contributor.getId() != null) {
+                            // TODO: check for int overflow
+                            var c = new ContributorsWithUsername.Contributor(contributor.getId().intValue(), contributor.getUsername());
+                            index = contributorsWithUsername.getIndex(c);
+                        } else if (contributor.getIp() != null) {
+                            var c = new ContributorsWithIp.Contributor(contributor.getIp());
+                            index = contributorsWithIp.getIndex(c);
                         } else {
                             throw new RuntimeException("Contributor expected to have either an IP or an ID");
                         }
 
                         revisionsStream.printf(
-                                "const Revision revision_%d(%d, %d, contributor_%s, %s, %s, %s);\n",
+                                "const Revision revision_%d(%d, %d, %d, %s, %s, %s);\n",
                                 revision.getId(),
                                 revision.getId(),
                                 revision.getTimestamp().toGregorianCalendar().getTimeInMillis() / 1000,
-                                contributor.getId() != null ? contributor.getId() : contributor.getIp().replaceAll("(\\.|\\s)", "_"),
+                                index,
                                 revision.getMinor() != null ? "true" : "false",
                                 escapeString(revision.getComment()),
                                 escapeString(revision.getText().getValue()));
@@ -111,6 +119,9 @@ public class Main {
                     }
                 }
                 pagesStream.println("};");
+
+                contributorsWithUsername.dump(dataOutputDirectory);
+                contributorsWithIp.dump(dataOutputDirectory);
 
                 System.out.print("DICTIONARY SIZE: ");
                 System.out.println(dictionary.size());

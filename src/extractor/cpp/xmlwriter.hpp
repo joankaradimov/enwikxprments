@@ -5,6 +5,8 @@
 #include <time.h>
 #include <stack>
 
+#include "contributor.hpp"
+
 class XmlAttribute {
 public:
     XmlAttribute(const char* name, const char* value): name(name), value(value) {
@@ -27,6 +29,8 @@ private:
 class XmlWriter {
 public:
     XmlWriter(FILE* output): output(output), indentation(0) {
+        contributorsWithIp = ContributorWithIp::read();
+        contributorsWithUsername = ContributorWithUsername::read();
     }
 
     void openTag(const char* tagName, std::initializer_list<XmlAttribute> attributes = {}) {
@@ -83,6 +87,28 @@ public:
         writeNewLine();
     }
 
+    void writeContributor(int contributorIndex) {
+        int type = contributorIndex & 1;
+        int index = contributorIndex >> 1;
+
+        openTag("contributor");
+
+        if (type == 0) { // IP
+            writeTag("ip", contributorsWithIp[index].ip);
+        }
+        else {
+            ContributorWithUsername contributor = contributorsWithUsername[index];
+            if (contributor.username) {
+                writeTag("username", contributor.username);
+            }
+            if (contributor.id) {
+                writeTag("id", contributor.id);
+            }
+        }
+
+        closeTag();
+    }
+
     int printf(const char* format, ...) {
         va_list arglist;
         va_start(arglist, format);
@@ -94,6 +120,8 @@ private:
     FILE* output;
     int indentation;
     std::stack<const char*> tags;
+    std::vector<ContributorWithUsername> contributorsWithUsername;
+    std::vector<ContributorWithIp> contributorsWithIp;
 
     void writeOpeningTag(const char* tagName, const std::initializer_list<XmlAttribute>& attributes = {}) {
         tags.push(tagName);

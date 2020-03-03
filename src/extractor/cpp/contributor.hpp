@@ -1,33 +1,58 @@
 #pragma once
 
-#include "xmlwriter.hpp"
+#include <string.h>
+
+#include "util.hpp"
 
 enum ContributorType: char {
-    USER,
-    IP,
-    // TODO: implement IP range
-    CONVERSION_SCRIPT,
+    IP = 0,
+    USER = 1,
 };
 
-struct Contributor {
-    void write(XmlWriter xmlWriter) const {
-        xmlWriter.openTag("contributor");
-        if (contributorType == USER) {
-            if (username) {
-                xmlWriter.writeTag("username", username);
-            }
-            if (id) {
-                xmlWriter.writeTag("id", id);
-            }
-        } else if (contributorType == IP) {
-            xmlWriter.writeTag("ip", username);
-        } else if (contributorType == CONVERSION_SCRIPT) {
-            xmlWriter.writeTag("ip", "Conversion script");
+struct ContributorWithIp {
+    static std::vector<ContributorWithIp> read() {
+        std::vector<ContributorWithIp> result;
+        std::vector<char> data = readToMemory("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\contributors_with_ip");
+        char* bytes = data.data();
+        char* end = bytes + data.size();
+
+        while (bytes != end) {
+            ContributorWithIp contributor;
+            int length = strlen(bytes) + 1;
+            contributor.ip = new char[length];
+            memcpy(contributor.ip, bytes, length);
+            bytes += length;
+
+            result.push_back(contributor);
         }
-        xmlWriter.closeTag();
+
+        return result;
     }
 
-    const int id;
-    const ContributorType contributorType;
-    const char username[];
+    char* ip;
+};
+
+struct ContributorWithUsername {
+    static std::vector<ContributorWithUsername> read() {
+        std::vector<ContributorWithUsername> result;
+        std::vector<char> data = readToMemory("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\contributors_with_username");
+        char* bytes = data.data();
+        char* end = bytes + data.size();
+
+        while (bytes != end) {
+            ContributorWithUsername contributor;
+            contributor.id = *((int*) bytes);
+            bytes += sizeof(int);
+            int length = strlen(bytes) + 1;
+            contributor.username = new char[length];
+            memcpy(contributor.username, bytes, length);
+            bytes += length;
+
+            result.push_back(contributor);
+        }
+
+        return result;
+    }
+    int id;
+    char* username;
 };

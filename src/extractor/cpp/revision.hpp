@@ -12,14 +12,14 @@
 
 class Revision {
 public:
-    Revision(int id, time_t timestamp, const Contributor& contributor, bool minor, const char* comment, const char* text): id(id), timestamp(timestamp), contributor(contributor), minor(minor), comment(comment), text(text) {
+    Revision(int id, time_t timestamp, int contributorIndex, bool minor, const char* comment, const char* text): id(id), timestamp(timestamp), contributorIndex(contributorIndex), minor(minor), comment(comment), text(text) {
     }
 
     void write(XmlWriter xmlWriter) const {
         xmlWriter.openTag("revision");
         xmlWriter.writeTag("id", id);
         xmlWriter.writeTag("timestamp", timestamp);
-        contributor.write(xmlWriter);
+        xmlWriter.writeContributor(contributorIndex);
         if (minor) {
             xmlWriter.writeTag("minor", "");
         }
@@ -34,7 +34,7 @@ private:
 
     const int id;
     const time_t timestamp;
-    const Contributor& contributor;
+    const int contributorIndex;
     const bool minor;
     const char* comment;
     const char* text;
