@@ -26,8 +26,8 @@ public class Main {
 
             JAXBContext jaxbContext = JAXBContext.newInstance(org.mediawiki.xml.export.ObjectFactory.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            JAXBElement element = (JAXBElement) jaxbUnmarshaller.unmarshal(validXmlStream);
-            MediaWikiType mediaWiki = (MediaWikiType) element.getValue();
+            JAXBElement<MediaWikiType> element = (JAXBElement<MediaWikiType>) jaxbUnmarshaller.unmarshal(validXmlStream);
+            MediaWikiType mediaWiki = element.getValue();
 
             Path outputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\cpp");
 
