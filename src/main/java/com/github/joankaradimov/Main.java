@@ -97,14 +97,19 @@ public class Main {
                         }
 
                         revisionsStream.printf(
-                                "const Revision revision_%d(%d, %d, %d, %s, %s, %s);\n",
+                                "const Revision revision_%d(%d, %d, %d, %s, %s);\n",
                                 revision.getId(),
                                 revision.getId(),
                                 revision.getTimestamp().toGregorianCalendar().getTimeInMillis() / 1000,
                                 index,
                                 revision.getMinor() != null ? "true" : "false",
-                                escapeString(revision.getComment()),
-                                escapeString(revision.getText().getValue()));
+                                escapeString(revision.getComment()));
+
+                        String revisionTextFilename = "revision_text_" + revision.getId().toString();
+                        File revisionTextFile = dataOutputDirectory.resolve(revisionTextFilename).toFile();
+                        try (PrintWriter out = new PrintWriter(revisionTextFile, StandardCharsets.UTF_8)) {
+                            out.print(revision.getText().getValue());
+                        }
 
                         pagesStream.printf(
                                 "  Page(%s, %d, %s, revision_%d),\n",
