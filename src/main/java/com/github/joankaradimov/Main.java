@@ -77,11 +77,7 @@ public class Main {
                 for (PageType page : mediaWiki.getPage()) {
                     List<Object> revisionOrUpload = page.getRevisionOrUpload();
 
-                    if (revisionOrUpload.size() != 1) {
-                        throw new RuntimeException("Expected exactly one revision or upload");
-                    }
-
-                    if (revisionOrUpload.get(0) instanceof RevisionType) {
+                    if (revisionOrUpload.size() == 1 && revisionOrUpload.get(0) instanceof RevisionType) {
                         RevisionType revision = (RevisionType) revisionOrUpload.get(0);
                         ContributorType contributor = revision.getContributor();
                         int index;
@@ -122,6 +118,8 @@ public class Main {
                         var tokens = tokenize(revision.getText().getValue());
                         wordCount += tokens.size();
                         dictionary.addAll(tokens);
+                    } else {
+                        throw new RuntimeException("Expected exactly one revision");
                     }
                 }
                 pagesStream.println("};");
