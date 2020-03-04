@@ -16,8 +16,12 @@ std::vector<char> readToMemory(const char* filename) {
     return buffer;
 }
 
-int main() {
-    XmlWriter writer(stdout);
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        return 1;
+    }
+    FILE* output = fopen(argv[1], "wb");
+    XmlWriter writer(output);
 
     writer.openTag("mediawiki", {
         XmlAttribute("xmlns", "http://www.mediawiki.org/xml/export-0.3/"),
@@ -61,4 +65,8 @@ int main() {
         page.write(writer);
     }
     writer.closeTag();
+
+    fclose(output);
+
+    return 0;
 }
