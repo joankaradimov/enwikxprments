@@ -29,6 +29,33 @@ public class Main {
             Path outputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\cpp");
             Path dataOutputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data");
 
+            ContributorsWithUsername contributorsWithUsername = new ContributorsWithUsername();
+            ContributorsWithIp contributorsWithIp = new ContributorsWithIp();
+
+            for (PageType page : mediaWiki.getPage()) {
+                List<Object> revisionOrUpload = page.getRevisionOrUpload();
+
+                if (revisionOrUpload.size() != 1) {
+                    throw new RuntimeException("Expected exactly one revision or upload");
+                }
+
+                if (revisionOrUpload.get(0) instanceof RevisionType) {
+                    RevisionType revision = (RevisionType) revisionOrUpload.get(0);
+                    ContributorType contributor = revision.getContributor();
+
+                    if (contributor.getId() != null) {
+                        // TODO: check for int overflow
+                        var c = new ContributorsWithUsername.Contributor(contributor.getId().intValue(), contributor.getUsername());
+                        contributorsWithUsername.add(c);
+                    } else if (contributor.getIp() != null) {
+                        var c = new ContributorsWithIp.Contributor(contributor.getIp());
+                        contributorsWithIp.add(c);
+                    } else {
+                        throw new RuntimeException("Contributor expected to have either an IP or an ID");
+                    }
+                }
+            }
+
             try (PrintStream pagesStream = createCppPrintStream(outputDirectory, "pages.hpp");
                  PrintStream revisionsStream = createCppPrintStream(outputDirectory, "revisions.hpp")) {
 
@@ -46,32 +73,6 @@ public class Main {
                 Map<String, Integer> dictionary = new HashMap<>();
                 List<List<String>> tokensList = new ArrayList<>();
                 int wordCount = 0;
-                ContributorsWithUsername contributorsWithUsername = new ContributorsWithUsername();
-                ContributorsWithIp contributorsWithIp = new ContributorsWithIp();
-
-                for (PageType page : mediaWiki.getPage()) {
-                    List<Object> revisionOrUpload = page.getRevisionOrUpload();
-
-                    if (revisionOrUpload.size() != 1) {
-                        throw new RuntimeException("Expected exactly one revision or upload");
-                    }
-
-                    if (revisionOrUpload.get(0) instanceof RevisionType) {
-                        RevisionType revision = (RevisionType) revisionOrUpload.get(0);
-                        ContributorType contributor = revision.getContributor();
-
-                        if (contributor.getId() != null) {
-                            // TODO: check for int overflow
-                            var c = new ContributorsWithUsername.Contributor(contributor.getId().intValue(), contributor.getUsername());
-                            contributorsWithUsername.add(c);
-                        } else if (contributor.getIp() != null) {
-                            var c = new ContributorsWithIp.Contributor(contributor.getIp());
-                            contributorsWithIp.add(c);
-                        } else {
-                            throw new RuntimeException("Contributor expected to have either an IP or an ID");
-                        }
-                    }
-                }
 
                 for (PageType page : mediaWiki.getPage()) {
                     List<Object> revisionOrUpload = page.getRevisionOrUpload();
