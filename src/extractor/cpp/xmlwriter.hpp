@@ -59,7 +59,7 @@ public:
         writeIndentation();
         if (*string) {
             writeOpeningTag(tagName, attributes);
-            printf("%s", string);
+            writeTextNode(string);
             writeClosingTag();
         } else {
             printf("<%s", tagName);
@@ -85,6 +85,27 @@ public:
 
         writeClosingTag();
         writeNewLine();
+    }
+
+    void writeTextNode(const char* text) {
+        while (*text) {
+            switch (*text) {
+                case '"':
+                    fputs("&quot;", output);
+                    break;
+                case '<':
+                    fputs("&lt;", output);
+                    break;
+                case '>':
+                    fputs("&gt;", output);
+                    break;
+                default:
+                    fputc(*text, output);
+                    break;
+            }
+
+            ++text;
+        }
     }
 
     void writeContributor(int contributorIndex) {
