@@ -17,7 +17,13 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        try (FileInputStream stream = new FileInputStream("build/enwik9")) {
+        Path dataOutputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data");
+
+        ContributorsWithUsername contributorsWithUsername = new ContributorsWithUsername();
+        ContributorsWithIp contributorsWithIp = new ContributorsWithIp();
+        PageRevisions pageRevisions = new PageRevisions();
+
+        try (FileInputStream stream = new FileInputStream("build/enwik8")) {
             ByteArrayInputStream xmlClosingElements = new ByteArrayInputStream("</text></revision></page></mediawiki>".getBytes());
             SequenceInputStream validXmlStream = new SequenceInputStream(stream, xmlClosingElements);
 
@@ -25,12 +31,6 @@ public class Main {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             JAXBElement<MediaWikiType> element = (JAXBElement<MediaWikiType>) jaxbUnmarshaller.unmarshal(validXmlStream);
             MediaWikiType mediaWiki = element.getValue();
-
-            Path outputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\cpp");
-            Path dataOutputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data");
-
-            ContributorsWithUsername contributorsWithUsername = new ContributorsWithUsername();
-            ContributorsWithIp contributorsWithIp = new ContributorsWithIp();
 
             for (PageType page : mediaWiki.getPage()) {
                 List<Object> revisionOrUpload = page.getRevisionOrUpload();
@@ -56,12 +56,6 @@ public class Main {
                 }
             }
 
-            PageRevisions pageRevisions = new PageRevisions();
-
-            Map<String, Integer> dictionary = new HashMap<>();
-            List<List<String>> tokensList = new ArrayList<>();
-            int wordCount = 0;
-
             for (PageType page : mediaWiki.getPage()) {
                 List<Object> revisionOrUpload = page.getRevisionOrUpload();
 
@@ -86,33 +80,41 @@ public class Main {
                     throw new RuntimeException("Expected exactly one revision");
                 }
             }
-
-            for (PageRevisions.PageRevision pageRevision : pageRevisions) {
-                List<String> tokens = tokenize(pageRevision.revisionText);
-                tokensList.add(tokens);
-
-                wordCount += tokens.size();
-                for (var token : tokens) {
-                    int count = dictionary.getOrDefault(token, 0);
-                    dictionary.put(token, count + 1);
-                }
-            }
-
-            contributorsWithUsername.dump(dataOutputDirectory);
-            contributorsWithIp.dump(dataOutputDirectory);
-            pageRevisions.dump(dataOutputDirectory);
-
-            System.out.print("DICTIONARY SIZE: ");
-            System.out.println(dictionary.size());
-
-            System.out.print("WORD COUNT: ");
-            System.out.println(wordCount);
-
-            System.out.print("NON-REPEATING WORD COUNT: ");
-            System.out.println(dictionary.entrySet().stream().filter(entry -> entry.getValue() == 1).count());
         } catch (IOException | JAXBException e) {
             e.printStackTrace();
         }
+
+        Map<String, Integer> dictionary = new HashMap<>();
+        List<List<String>> tokensList = new ArrayList<>();
+        int wordCount = 0;
+
+        for (PageRevisions.PageRevision pageRevision : pageRevisions) {
+            List<String> tokens = tokenize(pageRevision.revisionText);
+            tokensList.add(tokens);
+
+            wordCount += tokens.size();
+            for (var token : tokens) {
+                int count = dictionary.getOrDefault(token, 0);
+                dictionary.put(token, count + 1);
+            }
+        }
+
+        try {
+            contributorsWithUsername.dump(dataOutputDirectory);
+            contributorsWithIp.dump(dataOutputDirectory);
+            pageRevisions.dump(dataOutputDirectory);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.print("DICTIONARY SIZE: ");
+        System.out.println(dictionary.size());
+
+        System.out.print("WORD COUNT: ");
+        System.out.println(wordCount);
+
+        System.out.print("NON-REPEATING WORD COUNT: ");
+        System.out.println(dictionary.entrySet().stream().filter(entry -> entry.getValue() == 1).count());
     }
 
     private static enum TokenType {
