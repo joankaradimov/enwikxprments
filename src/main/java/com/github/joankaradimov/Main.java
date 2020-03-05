@@ -158,20 +158,4 @@ public class Main {
     private static PrintStream createCppPrintStream(Path outputDirectory, String filename) throws IOException {
         return new PrintStream(outputDirectory.resolve(filename).toFile(), StandardCharsets.UTF_8);
     }
-
-    private static String escapeString(String string) {
-        if (string == null) {
-            return "nullptr";
-        }
-
-        String escapedString = string
-                .replaceAll("\\\\", "\\\\\\\\")
-                .replaceAll("&", "&amp;")
-                .replaceAll("\"", "&quot;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll("\n", "\\\\n\\\\\n");
-
-        return "\"" + escapedString + "\"";
-    }
 }
