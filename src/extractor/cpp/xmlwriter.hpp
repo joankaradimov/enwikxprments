@@ -100,6 +100,9 @@ public:
                 case '>':
                     fputs("&gt;", output);
                     break;
+                case '&':
+                    fputs("&amp;", output);
+                    break;
                 default:
                     fputc(*text, output);
                     break;
