@@ -88,9 +88,14 @@ public class Main {
 
                         pageRevisions.add(new PageRevisions.PageRevision(page, revision, index));
 
-                        var tokens = tokenize(revision.getText().getValue());
+                        List<String> tokens = tokenize(revision.getText().getValue());
+                        tokensList.add(tokens);
+
                         wordCount += tokens.size();
-                        dictionary.addAll(tokens);
+                        for (var token : tokens) {
+                            int count = dictionary.getOrDefault(token, 0);
+                            dictionary.put(token, count + 1);
+                        }
                     } else {
                         throw new RuntimeException("Expected exactly one revision");
                     }
@@ -105,6 +110,9 @@ public class Main {
 
                 System.out.print("WORD COUNT: ");
                 System.out.println(wordCount);
+
+                System.out.print("NON-REPEATING WORD COUNT: ");
+                System.out.println(dictionary.entrySet().stream().filter(entry -> entry.getValue() == 1).count());
             }
         } catch (IOException | JAXBException e) {
             e.printStackTrace();
