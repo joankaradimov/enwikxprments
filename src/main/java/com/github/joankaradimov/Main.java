@@ -58,62 +58,56 @@ public class Main {
 
             PageRevisions pageRevisions = new PageRevisions();
 
-            try (PrintStream pagesStream = createCppPrintStream(outputDirectory, "pages.hpp")) {
+            Map<String, Integer> dictionary = new HashMap<>();
+            List<List<String>> tokensList = new ArrayList<>();
+            int wordCount = 0;
 
-                pagesStream.println("#pragma once");
-                pagesStream.println();
+            for (PageType page : mediaWiki.getPage()) {
+                List<Object> revisionOrUpload = page.getRevisionOrUpload();
 
-                Map<String, Integer> dictionary = new HashMap<>();
-                List<List<String>> tokensList = new ArrayList<>();
-                int wordCount = 0;
+                if (revisionOrUpload.size() == 1 && revisionOrUpload.get(0) instanceof RevisionType) {
+                    RevisionType revision = (RevisionType) revisionOrUpload.get(0);
+                    ContributorType contributor = revision.getContributor();
+                    int index;
 
-                for (PageType page : mediaWiki.getPage()) {
-                    List<Object> revisionOrUpload = page.getRevisionOrUpload();
-
-                    if (revisionOrUpload.size() == 1 && revisionOrUpload.get(0) instanceof RevisionType) {
-                        RevisionType revision = (RevisionType) revisionOrUpload.get(0);
-                        ContributorType contributor = revision.getContributor();
-                        int index;
-
-                        if (contributor.getId() != null) {
-                            // TODO: check for int overflow
-                            var c = new ContributorsWithUsername.Contributor(contributor.getId().intValue(), contributor.getUsername());
-                            index = contributorsWithUsername.getIndex(c);
-                        } else if (contributor.getIp() != null) {
-                            var c = new ContributorsWithIp.Contributor(contributor.getIp());
-                            index = contributorsWithIp.getIndex(c);
-                        } else {
-                            throw new RuntimeException("Contributor expected to have either an IP or an ID");
-                        }
-
-                        pageRevisions.add(new PageRevisions.PageRevision(page, revision, index));
-
-                        List<String> tokens = tokenize(revision.getText().getValue());
-                        tokensList.add(tokens);
-
-                        wordCount += tokens.size();
-                        for (var token : tokens) {
-                            int count = dictionary.getOrDefault(token, 0);
-                            dictionary.put(token, count + 1);
-                        }
+                    if (contributor.getId() != null) {
+                        // TODO: check for int overflow
+                        var c = new ContributorsWithUsername.Contributor(contributor.getId().intValue(), contributor.getUsername());
+                        index = contributorsWithUsername.getIndex(c);
+                    } else if (contributor.getIp() != null) {
+                        var c = new ContributorsWithIp.Contributor(contributor.getIp());
+                        index = contributorsWithIp.getIndex(c);
                     } else {
-                        throw new RuntimeException("Expected exactly one revision");
+                        throw new RuntimeException("Contributor expected to have either an IP or an ID");
                     }
+
+                    pageRevisions.add(new PageRevisions.PageRevision(page, revision, index));
+
+                    List<String> tokens = tokenize(revision.getText().getValue());
+                    tokensList.add(tokens);
+
+                    wordCount += tokens.size();
+                    for (var token : tokens) {
+                        int count = dictionary.getOrDefault(token, 0);
+                        dictionary.put(token, count + 1);
+                    }
+                } else {
+                    throw new RuntimeException("Expected exactly one revision");
                 }
-
-                contributorsWithUsername.dump(dataOutputDirectory);
-                contributorsWithIp.dump(dataOutputDirectory);
-                pageRevisions.dump(dataOutputDirectory);
-
-                System.out.print("DICTIONARY SIZE: ");
-                System.out.println(dictionary.size());
-
-                System.out.print("WORD COUNT: ");
-                System.out.println(wordCount);
-
-                System.out.print("NON-REPEATING WORD COUNT: ");
-                System.out.println(dictionary.entrySet().stream().filter(entry -> entry.getValue() == 1).count());
             }
+
+            contributorsWithUsername.dump(dataOutputDirectory);
+            contributorsWithIp.dump(dataOutputDirectory);
+            pageRevisions.dump(dataOutputDirectory);
+
+            System.out.print("DICTIONARY SIZE: ");
+            System.out.println(dictionary.size());
+
+            System.out.print("WORD COUNT: ");
+            System.out.println(wordCount);
+
+            System.out.print("NON-REPEATING WORD COUNT: ");
+            System.out.println(dictionary.entrySet().stream().filter(entry -> entry.getValue() == 1).count());
         } catch (IOException | JAXBException e) {
             e.printStackTrace();
         }
