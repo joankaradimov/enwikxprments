@@ -1,10 +1,6 @@
 #include "contributor.hpp"
-#include "revision.hpp"
-#include "page.hpp"
+#include "page_revision.hpp"
 #include "xmlwriter.hpp"
-
-#include "revisions.hpp"
-#include "pages.hpp"
 
 std::vector<char> readToMemory(const char* filename) {
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
@@ -61,8 +57,9 @@ int main(int argc, char *argv[]) {
     writer.closeTag();
     writer.closeTag();
 
-    for (const Page& page : pages) {
-        page.write(writer);
+    std::vector<PageRevision> pageRevisions = PageRevision::read();
+    for (const PageRevision& pageRevision : pageRevisions) {
+        writer.writePage(pageRevision);
     }
     writer.closeTag();
 

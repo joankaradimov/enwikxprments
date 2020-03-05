@@ -6,6 +6,7 @@
 #include <stack>
 
 #include "contributor.hpp"
+#include "page_revision.hpp"
 
 class XmlAttribute {
 public:
@@ -106,6 +107,36 @@ public:
 
             ++text;
         }
+    }
+
+    void writePage(const PageRevision& pageRevision) {
+        openTag("page");
+        writeTag("title", pageRevision.pageTitle);
+        writeTag("id", pageRevision.pageId);
+
+        if (*pageRevision.pageRestrictions) {
+            writeTag("restrictions", pageRevision.pageRestrictions);
+        }
+
+        writeRevision(pageRevision);
+
+        closeTag();
+    }
+
+    void writeRevision(const PageRevision& pageRevision) {
+        openTag("revision");
+        writeTag("id", pageRevision.revisionId);
+        writeTag("timestamp", pageRevision.revisionTimestamp);
+        writeContributor(pageRevision.revisionContributorIndex);
+        if (pageRevision.revisionMinor) {
+            writeTag("minor", "");
+        }
+        if (*pageRevision.revisionComment) {
+            writeTag("comment", pageRevision.revisionComment);
+        }
+
+        writeTag("text", pageRevision.revisionText, {XmlAttribute("xml:space", "preserve")});
+        closeTag();
     }
 
     void writeContributor(int contributorIndex) {

@@ -56,19 +56,12 @@ public class Main {
                 }
             }
 
-            try (PrintStream pagesStream = createCppPrintStream(outputDirectory, "pages.hpp");
-                 PrintStream revisionsStream = createCppPrintStream(outputDirectory, "revisions.hpp")) {
+            PageRevisions pageRevisions = new PageRevisions();
+
+            try (PrintStream pagesStream = createCppPrintStream(outputDirectory, "pages.hpp")) {
 
                 pagesStream.println("#pragma once");
                 pagesStream.println();
-                pagesStream.println("#include \"page.hpp\"");
-                pagesStream.println("#include \"revisions.hpp\"");
-                pagesStream.println();
-                pagesStream.println("const Page pages[] = {");
-                revisionsStream.println("#pragma once");
-                revisionsStream.println();
-                revisionsStream.println("#include \"revision.hpp\"");
-                revisionsStream.println();
 
                 Map<String, Integer> dictionary = new HashMap<>();
                 List<List<String>> tokensList = new ArrayList<>();
@@ -93,27 +86,7 @@ public class Main {
                             throw new RuntimeException("Contributor expected to have either an IP or an ID");
                         }
 
-                        revisionsStream.printf(
-                                "const Revision revision_%d(%d, %d, %d, %s, %s);\n",
-                                revision.getId(),
-                                revision.getId(),
-                                revision.getTimestamp().toGregorianCalendar().getTimeInMillis() / 1000,
-                                index,
-                                revision.getMinor() != null ? "true" : "false",
-                                escapeString(revision.getComment()));
-
-                        String revisionTextFilename = "revision_text_" + revision.getId().toString();
-                        File revisionTextFile = dataOutputDirectory.resolve(revisionTextFilename).toFile();
-                        try (PrintWriter out = new PrintWriter(revisionTextFile, StandardCharsets.UTF_8)) {
-                            out.print(revision.getText().getValue());
-                        }
-
-                        pagesStream.printf(
-                                "  Page(%s, %d, %s, revision_%d),\n",
-                                escapeString(page.getTitle()),
-                                page.getId(),
-                                escapeString(page.getRestrictions()),
-                                revision.getId());
+                        pageRevisions.add(new PageRevisions.PageRevision(page, revision, index));
 
                         var tokens = tokenize(revision.getText().getValue());
                         wordCount += tokens.size();
@@ -122,10 +95,10 @@ public class Main {
                         throw new RuntimeException("Expected exactly one revision");
                     }
                 }
-                pagesStream.println("};");
 
                 contributorsWithUsername.dump(dataOutputDirectory);
                 contributorsWithIp.dump(dataOutputDirectory);
+                pageRevisions.dump(dataOutputDirectory);
 
                 System.out.print("DICTIONARY SIZE: ");
                 System.out.println(dictionary.size());
