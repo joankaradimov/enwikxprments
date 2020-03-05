@@ -9,10 +9,9 @@ import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.TreeSet;
+import java.util.Iterator;
 
-public class PageRevisions {
+public class PageRevisions implements Iterable<PageRevisions.PageRevision> {
     public static final class PageRevision {
         public PageRevision(PageType page, RevisionType revision, int contributorIndex) {
             pageTitle = page.getTitle();
@@ -40,6 +39,11 @@ public class PageRevisions {
 
     ArrayList<PageRevision> pageRevisions = new ArrayList<>();
     private static byte[] NULL_TERMINATOR = new byte[] { 0 };
+
+    @Override
+    public Iterator<PageRevision> iterator() {
+        return pageRevisions.iterator();
+    }
 
     public void add(PageRevision pageRevision) {
         pageRevisions.add(pageRevision);

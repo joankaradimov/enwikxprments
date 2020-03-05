@@ -82,17 +82,19 @@ public class Main {
                     }
 
                     pageRevisions.add(new PageRevisions.PageRevision(page, revision, index));
-
-                    List<String> tokens = tokenize(revision.getText().getValue());
-                    tokensList.add(tokens);
-
-                    wordCount += tokens.size();
-                    for (var token : tokens) {
-                        int count = dictionary.getOrDefault(token, 0);
-                        dictionary.put(token, count + 1);
-                    }
                 } else {
                     throw new RuntimeException("Expected exactly one revision");
+                }
+            }
+
+            for (PageRevisions.PageRevision pageRevision : pageRevisions) {
+                List<String> tokens = tokenize(pageRevision.revisionText);
+                tokensList.add(tokens);
+
+                wordCount += tokens.size();
+                for (var token : tokens) {
+                    int count = dictionary.getOrDefault(token, 0);
+                    dictionary.put(token, count + 1);
                 }
             }
 
