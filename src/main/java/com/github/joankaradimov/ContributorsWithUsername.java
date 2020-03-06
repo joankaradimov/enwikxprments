@@ -20,7 +20,12 @@ public class ContributorsWithUsername {
 
         @Override
         public int compareTo(Contributor other) {
-            return Integer.compare(this.id, other.id);
+            int idComparison = Integer.compare(this.id, other.id);
+            if (idComparison == 0) {
+                return this.username.compareTo(other.username);
+            } else {
+                return idComparison;
+            }
         }
 
         @Override
@@ -28,12 +33,12 @@ public class ContributorsWithUsername {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Contributor that = (Contributor) o;
-            return id == that.id;
+            return id == that.id && username.equals(that.username);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id);
+            return Objects.hash(id, username);
         }
     }
 
