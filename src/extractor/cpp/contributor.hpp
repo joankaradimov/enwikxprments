@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-#include "util.hpp"
+#include "binary_reader.hpp"
 
 enum ContributorType: char {
     IP = 0,
@@ -12,16 +12,12 @@ enum ContributorType: char {
 struct ContributorWithIp {
     static std::vector<ContributorWithIp> read() {
         std::vector<ContributorWithIp> result;
-        std::vector<char> data = readToMemory("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\contributors_with_ip");
-        char* bytes = data.data();
-        char* end = bytes + data.size();
+        BinaryReader reader("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\contributors_with_ip");
 
-        while (bytes != end) {
+        while (reader.has_more()) {
             ContributorWithIp contributor;
-            int length = strlen(bytes) + 1;
-            contributor.ip = new char[length];
-            memcpy(contributor.ip, bytes, length);
-            bytes += length;
+
+            contributor.ip = reader.read_string();
 
             result.push_back(contributor);
         }
@@ -35,18 +31,13 @@ struct ContributorWithIp {
 struct ContributorWithUsername {
     static std::vector<ContributorWithUsername> read() {
         std::vector<ContributorWithUsername> result;
-        std::vector<char> data = readToMemory("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\contributors_with_username");
-        char* bytes = data.data();
-        char* end = bytes + data.size();
+        BinaryReader reader("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\contributors_with_username");
 
-        while (bytes != end) {
+        while (reader.has_more()) {
             ContributorWithUsername contributor;
-            contributor.id = *((int*) bytes);
-            bytes += sizeof(int);
-            int length = strlen(bytes) + 1;
-            contributor.username = new char[length];
-            memcpy(contributor.username, bytes, length);
-            bytes += length;
+
+            contributor.id = reader.read<int>();
+            contributor.username = reader.read_string();
 
             result.push_back(contributor);
         }

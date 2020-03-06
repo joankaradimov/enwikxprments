@@ -2,16 +2,6 @@
 #include "page_revision.hpp"
 #include "xmlwriter.hpp"
 
-std::vector<char> readToMemory(const char* filename) {
-    std::ifstream file(filename, std::ios::binary | std::ios::ate);
-    std::streamsize size = file.tellg();
-    file.seekg(0, std::ios::beg);
-
-    std::vector<char> buffer(size);
-    file.read(buffer.data(), size);
-    return buffer;
-}
-
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         return 1;

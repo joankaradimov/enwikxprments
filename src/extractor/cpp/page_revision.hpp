@@ -3,54 +3,25 @@
 #include <time.h>
 #include <vector>
 
-#include "util.hpp"
+#include "binary_reader.hpp"
 
 struct PageRevision {
     static std::vector<PageRevision> read() {
         std::vector<PageRevision> result;
-        std::vector<char> data = readToMemory("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\page_revisions");
-        char* bytes = data.data();
-        char* end = bytes + data.size();
+        BinaryReader reader("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\page_revisions");
 
-        char* start = bytes;
-        while (bytes != end) {
+        while (reader.has_more()) {
             PageRevision page_revision;
-            int length;
 
-            length = strlen(bytes) + 1;
-            page_revision.pageTitle = new char[length];
-            memcpy(page_revision.pageTitle, bytes, length);
-            bytes += length;
-
-            page_revision.pageId = *((int*) bytes);
-            bytes += sizeof(int);
-
-            length = strlen(bytes) + 1;
-            page_revision.pageRestrictions = new char[length];
-            memcpy(page_revision.pageRestrictions, bytes, length);
-            bytes += length;
-
-            page_revision.revisionId = *((int*) bytes);
-            bytes += sizeof(int);
-
-            page_revision.revisionTimestamp = *((long long*) bytes);
-            bytes += sizeof(long long);
-
-            page_revision.revisionContributorIndex = *((int*) bytes);
-            bytes += sizeof(int);
-
-            page_revision.revisionMinor = *((char*) bytes);
-            bytes += 1;
-
-            length = strlen(bytes) + 1;
-            page_revision.revisionComment = new char[length];
-            memcpy(page_revision.revisionComment, bytes, length);
-            bytes += length;
-
-            length = strlen(bytes) + 1;
-            page_revision.revisionText = new char[length];
-            memcpy(page_revision.revisionText, bytes, length);
-            bytes += length;
+            page_revision.pageTitle = reader.read_string();
+            page_revision.pageId = reader.read<int>();
+            page_revision.pageRestrictions = reader.read_string();
+            page_revision.revisionId = reader.read<int>();
+            page_revision.revisionTimestamp = reader.read<time_t>();
+            page_revision.revisionContributorIndex = reader.read<int>();
+            page_revision.revisionMinor = reader.read<char>();;
+            page_revision.revisionComment = reader.read_string();
+            page_revision.revisionText = reader.read_string();
 
             result.push_back(page_revision);
         }
