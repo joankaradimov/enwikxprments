@@ -51,8 +51,10 @@ public class PageRevisions implements Iterable<PageRevisions.PageRevision> {
 
     public void dump(Path outputDirectory) throws IOException {
         File outputFile = outputDirectory.resolve("page_revisions").toFile();
+        File textOutputFile = outputDirectory.resolve("page_revisions_text").toFile();
 
-        try (FileOutputStream output = new FileOutputStream(outputFile)) {
+        try (FileOutputStream output = new FileOutputStream(outputFile);
+             FileOutputStream textOutput = new FileOutputStream(textOutputFile)) {
             for (PageRevision pageRevision : pageRevisions) {
                 output.write(pageRevision.pageTitle.getBytes(StandardCharsets.UTF_8));
                 output.write(NULL_TERMINATOR);
@@ -65,8 +67,9 @@ public class PageRevisions implements Iterable<PageRevisions.PageRevision> {
                 output.write(pageRevision.revisionMinor ? 1 : 0);
                 output.write(pageRevision.revisionComment.getBytes(StandardCharsets.UTF_8));
                 output.write(NULL_TERMINATOR);
-                output.write(pageRevision.revisionText.getBytes(StandardCharsets.UTF_8));
-                output.write(NULL_TERMINATOR);
+
+                textOutput.write(pageRevision.revisionText.getBytes(StandardCharsets.UTF_8));
+                textOutput.write(NULL_TERMINATOR);
             }
         }
     }
