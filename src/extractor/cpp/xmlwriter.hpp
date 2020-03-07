@@ -117,8 +117,8 @@ public:
         writeTag("title", pageRevision.pageTitle);
         writeTag("id", pageRevision.pageId);
 
-        if (*pageRevision.pageRestrictions) {
-            writeTag("restrictions", pageRevision.pageRestrictions);
+        if (pageRevision.pageRestrictions) {
+            writeTag("restrictions", pageRevision.getPageRestrictions());
         }
 
         writeRevision(pageRevision);
