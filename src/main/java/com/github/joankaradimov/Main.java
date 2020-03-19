@@ -23,7 +23,7 @@ public class Main {
         ContributorsWithIp contributorsWithIp = new ContributorsWithIp();
         PageRevisions pageRevisions = new PageRevisions();
 
-        try (FileInputStream stream = new FileInputStream("build/enwik8")) {
+        try (FileInputStream stream = new FileInputStream("build/enwik9")) {
             ByteArrayInputStream xmlClosingElements = new ByteArrayInputStream("</text></revision></page></mediawiki>".getBytes());
             SequenceInputStream validXmlStream = new SequenceInputStream(stream, xmlClosingElements);
 
