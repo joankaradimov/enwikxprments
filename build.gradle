@@ -45,6 +45,8 @@ model {
     components {
         extractor(NativeExecutableSpec)
     }
+    // TODO: use these options with g++
+    // g++ options: g++ -s -Os -ffunction-sections -fdata-sections -Wno-trigraphs -Wl,--gc-sections lib.cpp
 }
 
 run.dependsOn(unzip)
