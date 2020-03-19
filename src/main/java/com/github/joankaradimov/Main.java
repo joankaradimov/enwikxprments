@@ -17,7 +17,11 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Path dataOutputDirectory = Path.of("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data");
+        Path dataOutputDirectory = Path.of(".\\src\\extractor\\data");
+
+        if (!dataOutputDirectory.toFile().exists()) {
+            dataOutputDirectory.toFile().mkdirs();
+        }
 
         ContributorsWithUsername contributorsWithUsername = new ContributorsWithUsername();
         ContributorsWithIp contributorsWithIp = new ContributorsWithIp();
