@@ -31,13 +31,14 @@ struct ContributorWithIp {
 struct ContributorWithUsername {
     static std::vector<ContributorWithUsername> read() {
         std::vector<ContributorWithUsername> result;
-        BinaryReader reader("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\contributors_with_username");
+        BinaryReader id_reader("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\contributors_with_username_id");
+        BinaryReader username_reader("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\contributors_with_username_username");
 
-        while (reader.has_more()) {
+        while (id_reader.has_more()) {
             ContributorWithUsername contributor;
 
-            contributor.id = reader.read<int>();
-            contributor.username = reader.read_string();
+            contributor.id = id_reader.read<int>();
+            contributor.username = username_reader.read_string();
 
             result.push_back(contributor);
         }

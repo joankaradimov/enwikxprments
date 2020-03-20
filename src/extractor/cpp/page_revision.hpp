@@ -21,19 +21,21 @@ struct PageRevision {
     static std::vector<PageRevision> read() {
         std::vector<PageRevision> result;
         BinaryReader reader("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\page_revisions");
+        BinaryReader title_reader("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\page_revisions_title");
+        BinaryReader comment_reader("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\page_revisions_comment");
         BinaryReader text_reader("C:\\Users\\joank\\work\\enwikxprments\\src\\extractor\\data\\page_revisions_text");
 
         while (reader.has_more()) {
             PageRevision page_revision;
 
-            page_revision.pageTitle = reader.read_string();
+            page_revision.pageTitle = title_reader.read_string();
             page_revision.pageId = reader.read<int>();
             page_revision.pageRestrictions = reader.read<char>();
             page_revision.revisionId = reader.read<int>();
             page_revision.revisionTimestamp = reader.read<time_t>();
             page_revision.revisionContributorIndex = reader.read<int>();
             page_revision.revisionMinor = reader.read<char>();;
-            page_revision.revisionComment = reader.read_string();
+            page_revision.revisionComment = comment_reader.read_string();
             page_revision.revisionText = text_reader.read_string();
 
             result.push_back(page_revision);

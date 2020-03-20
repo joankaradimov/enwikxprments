@@ -56,12 +56,16 @@ public class ContributorsWithUsername {
     }
 
     public void dump(Path outputDirectory) throws IOException {
-        File outputFile = outputDirectory.resolve("contributors_with_username").toFile();
-        try (FileOutputStream output = new FileOutputStream(outputFile)) {
+        File idOutputFile = outputDirectory.resolve("contributors_with_username_id").toFile();
+        File usernameOutputFile = outputDirectory.resolve("contributors_with_username_username").toFile();
+
+        try (FileOutputStream idOutput = new FileOutputStream(idOutputFile);
+             FileOutputStream usernameOutput = new FileOutputStream(usernameOutputFile)) {
             for (Contributor contributor : contributors) {
-                output.write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(contributor.id).array());
-                output.write(contributor.username.getBytes(StandardCharsets.UTF_8));
-                output.write(NULL_TERMINATOR);
+                idOutput.write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(contributor.id).array());
+
+                usernameOutput.write(contributor.username.getBytes(StandardCharsets.UTF_8));
+                usernameOutput.write(NULL_TERMINATOR);
             }
         }
     }

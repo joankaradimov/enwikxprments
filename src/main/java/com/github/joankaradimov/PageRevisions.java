@@ -80,21 +80,28 @@ public class PageRevisions implements Iterable<PageRevisions.PageRevision> {
 
     public void dump(Path outputDirectory) throws IOException {
         File outputFile = outputDirectory.resolve("page_revisions").toFile();
+        File titleOutputFile = outputDirectory.resolve("page_revisions_title").toFile();
+        File commentOutputFile = outputDirectory.resolve("page_revisions_comment").toFile();
         File textOutputFile = outputDirectory.resolve("page_revisions_text").toFile();
 
         try (FileOutputStream output = new FileOutputStream(outputFile);
+             FileOutputStream titleOutput = new FileOutputStream(titleOutputFile);
+             FileOutputStream commentOutput = new FileOutputStream(commentOutputFile);
              FileOutputStream textOutput = new FileOutputStream(textOutputFile)) {
+
             for (PageRevision pageRevision : pageRevisions) {
-                output.write(pageRevision.pageTitle.getBytes(StandardCharsets.UTF_8));
-                output.write(NULL_TERMINATOR);
+                titleOutput.write(pageRevision.pageTitle.getBytes(StandardCharsets.UTF_8));
+                titleOutput.write(NULL_TERMINATOR);
+
                 output.write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(pageRevision.pageId).array());
                 output.write(pageRevision.pageRestrictions.ordinal());
                 output.write(ByteBuffer.allocate(Integer.BYTES).order(ByteOrder.LITTLE_ENDIAN).putInt(pageRevision.revisionId).array());
                 output.write(ByteBuffer.allocate(Long.BYTES).order(ByteOrder.LITTLE_ENDIAN).putLong(pageRevision.revisionTimestamp).array());
                 output.write(ByteBuffer.allocate(Integer.BYTES).order(ByteOrder.LITTLE_ENDIAN).putInt(pageRevision.revisionContributorIndex).array());
                 output.write(pageRevision.revisionMinor ? 1 : 0);
-                output.write(pageRevision.revisionComment.getBytes(StandardCharsets.UTF_8));
-                output.write(NULL_TERMINATOR);
+
+                commentOutput.write(pageRevision.revisionComment.getBytes(StandardCharsets.UTF_8));
+                commentOutput.write(NULL_TERMINATOR);
 
                 textOutput.write(pageRevision.revisionText.getBytes(StandardCharsets.UTF_8));
                 textOutput.write(NULL_TERMINATOR);
