@@ -1,0 +1,8 @@
+pip==19.2.3
+setuptools==41.2.0
+tensorflow==2.1.0
+tensorflow-datasets==2.1.0
+jupyter==1.0.0
+numpy==1.18.1
+matplotlib==3.2.0
+huffman==0.1.2
