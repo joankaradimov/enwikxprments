@@ -10,7 +10,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -101,21 +100,6 @@ public class Main {
             e.printStackTrace();
         }
 
-        Map<String, Integer> dictionary = new HashMap<>();
-        List<List<String>> tokensList = new ArrayList<>();
-        int wordCount = 0;
-
-        for (PageRevisions.PageRevision pageRevision : pageRevisions) {
-            List<String> tokens = tokenize(pageRevision.revisionText);
-            tokensList.add(tokens);
-
-            wordCount += tokens.size();
-            for (var token : tokens) {
-                int count = dictionary.getOrDefault(token, 0);
-                dictionary.put(token, count + 1);
-            }
-        }
-
         try {
             contributorsWithUsername.dump(dataOutputDirectory);
             contributorsWithIpAddress.dump(dataOutputDirectory);
@@ -125,62 +109,5 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.print("DICTIONARY SIZE: ");
-        System.out.println(dictionary.size());
-
-        System.out.print("WORD COUNT: ");
-        System.out.println(wordCount);
-
-        System.out.print("NON-REPEATING WORD COUNT: ");
-        System.out.println(dictionary.entrySet().stream().filter(entry -> entry.getValue() == 1).count());
-    }
-
-    private static enum TokenType {
-        ALPHABETIC,
-        NUMERIC,
-        OTHER,
-    }
-
-    private static List<String> tokenize(String text) {
-        List<String> result = new ArrayList<>();
-        StringBuilder token = new StringBuilder();
-        TokenType tokenType= TokenType.OTHER;
-
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-            if (Character.isLetter(c)) {
-                if (token.length() == 0) {
-                    tokenType = TokenType.ALPHABETIC;
-                } else if (tokenType != TokenType.ALPHABETIC) {
-                    result.add(token.toString());
-                    token.setLength(0);
-                }
-                token.append(c);
-            } else if (Character.isDigit(c)) {
-                if (token.length() == 0) {
-                    tokenType = TokenType.NUMERIC;
-                } else if (tokenType != TokenType.NUMERIC) {
-                    result.add(token.toString());
-                    token.setLength(0);
-                }
-                token.append(c);
-            } else {
-                if (token.length() != 0) {
-                    result.add(token.toString());
-                    token.setLength(0);
-                }
-                result.add(Character.toString(c));
-            }
-        }
-        if (token.length() != 0) {
-            result.add(token.toString());
-        }
-
-        return result;
-    }
-
-    private static PrintStream createCppPrintStream(Path outputDirectory, String filename) throws IOException {
-        return new PrintStream(outputDirectory.resolve(filename).toFile(), StandardCharsets.UTF_8);
     }
 }
