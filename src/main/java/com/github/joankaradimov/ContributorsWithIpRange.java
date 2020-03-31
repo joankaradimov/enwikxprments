@@ -2,9 +2,9 @@ package com.github.joankaradimov;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Objects;
+import java.util.HashMap;
 
 public class ContributorsWithIpRange {
     public static final class Contributor {
@@ -36,11 +36,13 @@ public class ContributorsWithIpRange {
     public static final int CONTRIBUTOR_TYPE = 1; // TODO: use an enum
 
     private int maxIndex = 0;
-    private final LinkedHashMap<Contributor, Integer> contributors = new LinkedHashMap<>();
+    private final ArrayList<Contributor> contributorList = new ArrayList<>();
+    private final HashMap<Contributor, Integer> contributors = new HashMap<>();
 
     public void add(Contributor contributor) {
         if (!contributors.containsKey(contributor)) {
             contributors.put(contributor, maxIndex++);
+            contributorList.add(contributor);
         }
     }
 
@@ -51,7 +53,7 @@ public class ContributorsWithIpRange {
     public void dump(Path outputDirectory) throws IOException {
         File outputFile = outputDirectory.resolve("contributors_with_ip_range").toFile();
         try (FileOutputStream output = new FileOutputStream(outputFile)) {
-            for (Contributor contributor : contributors.keySet()) {
+            for (Contributor contributor : contributorList) {
                 output.write(contributor.ipRange);
             }
         }

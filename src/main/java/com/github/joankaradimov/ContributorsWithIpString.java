@@ -5,7 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class ContributorsWithIpString {
@@ -34,11 +35,13 @@ public class ContributorsWithIpString {
     private static byte[] NULL_TERMINATOR = new byte[] { 0 };
 
     private int maxIndex = 0;
-    private final LinkedHashMap<Contributor, Integer> contributors = new LinkedHashMap<>();
+    private final ArrayList<Contributor> contributorList = new ArrayList<>();
+    private final HashMap<Contributor, Integer> contributors = new HashMap<>();
 
     public void add(Contributor contributor) {
         if (!contributors.containsKey(contributor)) {
             contributors.put(contributor, maxIndex++);
+            contributorList.add(contributor);
         }
     }
 
@@ -49,7 +52,7 @@ public class ContributorsWithIpString {
     public void dump(Path outputDirectory) throws IOException {
         File outputFile = outputDirectory.resolve("contributors_with_ip_string").toFile();
         try (FileOutputStream output = new FileOutputStream(outputFile)) {
-            for (Contributor contributor : contributors.keySet()) {
+            for (Contributor contributor : contributorList) {
                 output.write(contributor.ip.getBytes(StandardCharsets.UTF_8));
                 output.write(NULL_TERMINATOR);
             }
