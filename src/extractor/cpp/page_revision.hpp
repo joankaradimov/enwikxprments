@@ -34,7 +34,7 @@ struct PageRevision {
             page_revision.revisionId = reader.read<int>();
             page_revision.revisionTimestamp = reader.read<time_t>();
             page_revision.revisionContributorIndex = reader.read<int>();
-            page_revision.revisionMinor = reader.read<char>();;
+            page_revision.revisionMinor = reader.read<char>();
             page_revision.revisionComment = comment_reader.read_string();
             page_revision.revisionText = text_reader.read_string();
 
