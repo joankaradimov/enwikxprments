@@ -42,7 +42,7 @@ public class ContributorsWithUsername {
         }
     }
 
-    public static final int CONTRIBUTOR_TYPE = 1; // TODO: use an enum
+    public static final int CONTRIBUTOR_TYPE = 3; // TODO: use an enum
     private static byte[] NULL_TERMINATOR = new byte[] { 0 };
 
     private final TreeSet<Contributor> contributors = new TreeSet<>();
@@ -52,7 +52,7 @@ public class ContributorsWithUsername {
     }
 
     public int getIndex(Contributor contributor) {
-        return (contributors.headSet(contributor).size() << 1) | CONTRIBUTOR_TYPE;
+        return (contributors.headSet(contributor).size() << 2) | CONTRIBUTOR_TYPE;
     }
 
     public void dump(Path outputDirectory) throws IOException {

@@ -10,7 +10,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.*;
@@ -23,8 +22,10 @@ public class Main {
             dataOutputDirectory.toFile().mkdirs();
         }
 
+        ContributorsWithIpAddress contributorsWithIpAddress = new ContributorsWithIpAddress();
+        ContributorsWithIpRange contributorsWithIpRange = new ContributorsWithIpRange();
+        ContributorsWithIpString contributorsWithIpString = new ContributorsWithIpString();
         ContributorsWithUsername contributorsWithUsername = new ContributorsWithUsername();
-        ContributorsWithIp contributorsWithIp = new ContributorsWithIp();
         PageRevisions pageRevisions = new PageRevisions();
 
         try (FileInputStream stream = new FileInputStream("build/enwik9")) {
@@ -51,11 +52,17 @@ public class Main {
                         // TODO: check for int overflow
                         var c = new ContributorsWithUsername.Contributor(contributor.getId().intValue(), contributor.getUsername());
                         contributorsWithUsername.add(c);
-                    } else if (contributor.getIp() != null) {
-                        var c = new ContributorsWithIp.Contributor(contributor.getIp());
-                        contributorsWithIp.add(c);
-                    } else {
+                    } else if (contributor.getIp() == null) {
                         throw new RuntimeException("Contributor expected to have either an IP or an ID");
+                    } else if (contributor.getIp().endsWith(".xxx")) {
+                        var c = new ContributorsWithIpRange.Contributor(contributor.getIp());
+                        contributorsWithIpRange.add(c);
+                    } else if (Arrays.stream(contributor.getIp().split("\\.")).allMatch(ipPart -> ipPart.matches("\\d+"))) {
+                        var c = new ContributorsWithIpAddress.Contributor(contributor.getIp());
+                        contributorsWithIpAddress.add(c);
+                    } else {
+                        var c = new ContributorsWithIpString.Contributor(contributor.getIp());
+                        contributorsWithIpString.add(c);
                     }
                 }
             }
@@ -72,11 +79,17 @@ public class Main {
                         // TODO: check for int overflow
                         var c = new ContributorsWithUsername.Contributor(contributor.getId().intValue(), contributor.getUsername());
                         index = contributorsWithUsername.getIndex(c);
-                    } else if (contributor.getIp() != null) {
-                        var c = new ContributorsWithIp.Contributor(contributor.getIp());
-                        index = contributorsWithIp.getIndex(c);
-                    } else {
+                    } else if (contributor.getIp() == null) {
                         throw new RuntimeException("Contributor expected to have either an IP or an ID");
+                    } else if (contributor.getIp().endsWith(".xxx")) {
+                        var c = new ContributorsWithIpRange.Contributor(contributor.getIp());
+                        index = contributorsWithIpRange.getIndex(c);
+                    } else if (Arrays.stream(contributor.getIp().split("\\.")).allMatch(ipPart -> ipPart.matches("\\d+"))) {
+                        var c = new ContributorsWithIpAddress.Contributor(contributor.getIp());
+                        index = contributorsWithIpAddress.getIndex(c);
+                    } else {
+                        var c = new ContributorsWithIpString.Contributor(contributor.getIp());
+                        index = contributorsWithIpString.getIndex(c);
                     }
 
                     pageRevisions.add(new PageRevisions.PageRevision(page, revision, index));
@@ -105,7 +118,9 @@ public class Main {
 
         try {
             contributorsWithUsername.dump(dataOutputDirectory);
-            contributorsWithIp.dump(dataOutputDirectory);
+            contributorsWithIpAddress.dump(dataOutputDirectory);
+            contributorsWithIpRange.dump(dataOutputDirectory);
+            contributorsWithIpString.dump(dataOutputDirectory);
             pageRevisions.dump(dataOutputDirectory);
         } catch (IOException e) {
             e.printStackTrace();

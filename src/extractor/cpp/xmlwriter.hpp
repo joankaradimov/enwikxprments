@@ -30,7 +30,9 @@ private:
 class XmlWriter {
 public:
     XmlWriter(FILE* output): output(output), indentation(0) {
-        contributorsWithIp = ContributorWithIp::read();
+        contributorsWithIpAddress = ContributorWithIpAddress::read();
+        contributorsWithIpRange = ContributorWithIpRange::read();
+        contributorsWithIpString = ContributorWithIpString::read();
         contributorsWithUsername = ContributorWithUsername::read();
     }
 
@@ -143,15 +145,31 @@ public:
     }
 
     void writeContributor(int contributorIndex) {
-        int type = contributorIndex & 1;
-        int index = contributorIndex >> 1;
+        int type = contributorIndex & 3;
+        int index = contributorIndex >> 2;
 
         openTag("contributor");
 
-        if (type == 0) { // IP
-            writeTag("ip", contributorsWithIp[index].ip);
+        if (type == ContributorType::IP_ADDRESS) {
+            writeIndentation();
+            writeOpeningTag("ip");
+            unsigned char* ip_bytes = contributorsWithIpAddress[index].ip_bytes;
+            printf("%d.%d.%d.%d", ip_bytes[0], ip_bytes[1], ip_bytes[2], ip_bytes[3]);
+            writeClosingTag();
+            writeNewLine();
         }
-        else {
+        else if (type == ContributorType::IP_RANGE) {
+            writeIndentation();
+            writeOpeningTag("ip");
+            unsigned char* ip_bytes = contributorsWithIpRange[index].ip_bytes;
+            printf("%d.%d.%d.xxx", ip_bytes[0], ip_bytes[1], ip_bytes[2]);
+            writeClosingTag();
+            writeNewLine();
+        }
+        else if (type == ContributorType::IP_STRING) {
+            writeTag("ip", contributorsWithIpString[index].ip);
+        }
+        else { // Username
             ContributorWithUsername contributor = contributorsWithUsername[index];
             if (contributor.username) {
                 writeTag("username", contributor.username);
@@ -175,8 +193,10 @@ private:
     FILE* output;
     int indentation;
     std::stack<const char*> tags;
+    std::vector<ContributorWithIpAddress> contributorsWithIpAddress;
+    std::vector<ContributorWithIpRange> contributorsWithIpRange;
+    std::vector<ContributorWithIpString> contributorsWithIpString;
     std::vector<ContributorWithUsername> contributorsWithUsername;
-    std::vector<ContributorWithIp> contributorsWithIp;
 
     void writeOpeningTag(const char* tagName, const std::initializer_list<XmlAttribute>& attributes = {}) {
         tags.push(tagName);
