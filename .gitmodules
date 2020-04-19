@@ -1,0 +1,3 @@
+[submodule "enwikxprments/libstudxml/libstudxml"]
+	path = enwikxprments/libstudxml/libstudxml
+	url = https://github.com/windoze/libstudxml.git

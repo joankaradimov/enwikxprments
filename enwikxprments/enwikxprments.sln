@@ -4,6 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "compress", "compress\compress.vcxproj", "{036A72AA-2B4D-4932-9DA2-57C7F62A9816}"
+	ProjectSection(ProjectDependencies) = postProject
+		{26482FB9-45CC-4188-8CA1-B86456967F47} = {26482FB9-45CC-4188-8CA1-B86456967F47}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B00EA5FC-1CA8-4465-ADD0-421E42943294}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libstudxml", "libstudxml\libstudxml.vcxproj", "{26482FB9-45CC-4188-8CA1-B86456967F47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +31,14 @@ Global
 		{036A72AA-2B4D-4932-9DA2-57C7F62A9816}.Release|x64.Build.0 = Release|x64
 		{036A72AA-2B4D-4932-9DA2-57C7F62A9816}.Release|x86.ActiveCfg = Release|Win32
 		{036A72AA-2B4D-4932-9DA2-57C7F62A9816}.Release|x86.Build.0 = Release|Win32
+		{26482FB9-45CC-4188-8CA1-B86456967F47}.Debug|x64.ActiveCfg = Debug|x64
+		{26482FB9-45CC-4188-8CA1-B86456967F47}.Debug|x64.Build.0 = Debug|x64
+		{26482FB9-45CC-4188-8CA1-B86456967F47}.Debug|x86.ActiveCfg = Debug|Win32
+		{26482FB9-45CC-4188-8CA1-B86456967F47}.Debug|x86.Build.0 = Debug|Win32
+		{26482FB9-45CC-4188-8CA1-B86456967F47}.Release|x64.ActiveCfg = Release|x64
+		{26482FB9-45CC-4188-8CA1-B86456967F47}.Release|x64.Build.0 = Release|x64
+		{26482FB9-45CC-4188-8CA1-B86456967F47}.Release|x86.ActiveCfg = Release|Win32
+		{26482FB9-45CC-4188-8CA1-B86456967F47}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
