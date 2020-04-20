@@ -4,6 +4,10 @@
 
 #include "xml/parser"
 
+#include "contributors_with_ip_address.hpp"
+#include "contributors_with_ip_string.hpp"
+#include "contributors_with_username.hpp"
+
 struct IsoDateTime {
     time_t time;
 
@@ -95,20 +99,31 @@ int main()
                     auto timestamp = enwik_parser.value<IsoDateTime>();
                     enwik_parser.next_expect(xml::parser::end_element);
 
+
                     enwik_parser.next_expect(xml::parser::start_element, ns, "contributor", xml::content::complex);
                     {
                         enwik_parser.next_expect(xml::parser::start_element);
 
-                        if (enwik_parser.name() == "ip") {
-                            std::string ip = enwik_parser.element();
-                        }
-                        else if (enwik_parser.name() == "username") {
+                        if (enwik_parser.name() == "username") {
                             std::string username = enwik_parser.element();
 
                             enwik_parser.next_expect(xml::parser::start_element, ns, "id", xml::content::simple);
                             enwik_parser.next_expect(xml::parser::characters);
                             auto id = enwik_parser.value<int>();
                             enwik_parser.next_expect(xml::parser::end_element);
+
+                            ContributorWithUsername contributor(id, username);
+                        }
+                        else if (enwik_parser.name() == "ip") {
+                            std::string text_element = enwik_parser.element();
+                            IP ip;
+
+                            if (sscanf_s(text_element.c_str(), "%hhu.%hhu.%hhu.%hhu", ip.components, ip.components + 1, ip.components + 2, ip.components + 3) == 4) {
+                                ContributorWithIpAddress contributor(ip);
+                            }
+                            else {
+                                ContributorWithIpString contributor(text_element);
+                            }
                         }
                     }
                     enwik_parser.next_expect(xml::parser::end_element);

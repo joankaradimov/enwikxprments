@@ -18,9 +18,15 @@
     <ClCompile Include="compress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="contributors_with_ip_string.hpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="contributors_with_ip_address.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="contributors_with_username.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

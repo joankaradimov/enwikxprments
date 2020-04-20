@@ -160,9 +160,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="compress.cpp" />
+    <ClCompile Include="contributors_with_ip_string.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="contributors_with_ip_address.hpp" />
+    <ClInclude Include="contributors_with_username.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
