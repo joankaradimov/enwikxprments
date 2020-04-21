@@ -9,10 +9,15 @@
 #include "contributors_with_username.hpp"
 
 struct IsoDateTime {
-    time_t time;
-
     IsoDateTime(time_t time): time(time) {}
     IsoDateTime(tm time) : IsoDateTime(mktime(&time)) {}
+
+    operator time_t() const {
+        return time;
+    }
+
+private:
+    time_t time;
 };
 
 namespace xml
