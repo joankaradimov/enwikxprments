@@ -163,6 +163,7 @@
     <ClCompile Include="contributors_with_ip_string.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="contributor.hpp" />
     <ClInclude Include="contributors_with_ip_address.hpp" />
     <ClInclude Include="contributors_with_username.hpp" />
   </ItemGroup>

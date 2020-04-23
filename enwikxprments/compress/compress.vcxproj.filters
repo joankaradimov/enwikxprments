@@ -29,5 +29,8 @@
     <ClInclude Include="contributors_with_username.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="contributor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
