@@ -32,5 +32,14 @@
     <ClInclude Include="contributor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="iso_date_time.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="restrictions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="contributors.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

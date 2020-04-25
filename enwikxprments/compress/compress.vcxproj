@@ -164,8 +164,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="contributor.hpp" />
+    <ClInclude Include="contributors.hpp" />
     <ClInclude Include="contributors_with_ip_address.hpp" />
     <ClInclude Include="contributors_with_username.hpp" />
+    <ClInclude Include="iso_date_time.hpp" />
+    <ClInclude Include="restrictions.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
