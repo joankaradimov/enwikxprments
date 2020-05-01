@@ -50,8 +50,7 @@ int main()
 
         do
         {
-            page_revisions.emplace_back();
-            PageRevision& page_revision = page_revisions.back();
+            PageRevision page_revision;
 
             enwik_parser.next_expect(xml::parser::start_element, ns, "page", xml::content::complex);
 
@@ -141,6 +140,8 @@ int main()
                 }
                 enwik_parser.next_expect(xml::parser::end_element);
             }
+
+            page_revisions.emplace_back(page_revision);
 
             enwik_parser.next_expect(xml::parser::end_element);
         } while (enwik_parser.peek() == xml::parser::start_element);

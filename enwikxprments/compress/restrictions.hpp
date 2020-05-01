@@ -4,7 +4,7 @@
 
 #include "xml/parser"
 
-enum class Restrictions {
+enum class Restrictions: unsigned char {
     NONE,
     EDIT_SYSOP_MOVE_SYSOP,
     MOVE_SYSOP_EDIT_SYSOP,
