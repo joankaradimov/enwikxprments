@@ -4,8 +4,7 @@
 
 #include "contributor.hpp"
 
-class ContributorWithUsername : public Contributor {
-public:
+struct ContributorWithUsername : public Contributor {
 	ContributorWithUsername(int id, const std::string& username) : id(id), username(username) {
 	}
 
@@ -16,7 +15,7 @@ public:
 	bool operator<(const ContributorWithUsername& other) const {
 		return this->id != other.id ? this->id < other.id : this->username < other.username;
 	}
-private:
+
 	int id;
 	std::string username;
 };

@@ -38,8 +38,5 @@
     <ClInclude Include="restrictions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="contributors.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

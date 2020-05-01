@@ -7,8 +7,7 @@ union IP {
 	unsigned char components[4];
 };
 
-class ContributorWithIpAddress: public Contributor {
-public:
+struct ContributorWithIpAddress: public Contributor {
 	ContributorWithIpAddress(IP ip): ip(ip) {
 	}
 
@@ -20,6 +19,5 @@ public:
 		return this->ip.address < other.ip.address;
 	}
 
-private:
 	IP ip;
 };

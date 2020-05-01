@@ -4,8 +4,7 @@
 
 #include "contributor.hpp"
 
-class ContributorWithIpString : public Contributor {
-public:
+struct ContributorWithIpString : public Contributor {
 	ContributorWithIpString(const std::string& address) : address(address) {
 	}
 
@@ -17,6 +16,5 @@ public:
 		return this->address < other.address;
 	}
 
-private:
 	std::string address;
 };
