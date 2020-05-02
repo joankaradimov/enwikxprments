@@ -1,0 +1,59 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="DownloadEnwik" BeforeTargets="UnipEnwik">
+    <DownloadFile SourceUrl="$(EnwikBaseUrl)$(EnwikFilename)" DestinationFolder="$(MSBuildProjectDirectory)">
+      <Output TaskParameter="DownloadedFile" ItemName="Content" />
+    </DownloadFile>
+  </Target>
+  <Target Name="UnipEnwik" BeforeTargets="CopyEnwik">
+    <Unzip SourceFiles="$(EnwikFilename)" DestinationFolder="$(ProjectDir)" OverwriteReadOnlyFiles="true" />
+  </Target>
+  <Target Name="CopyEnwik" BeforeTargets="Build">
+    <Copy SourceFiles="@(Content)" DestinationFolder="$(OutputPath)" UseHardlinksIfPossible="true" />
+  </Target>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="enwik8" Condition="'$(Configuration)'=='Debug'">
+      <Visible>True</Visible>
+    </Content>
+    <Content Include="enwik9" Condition="'$(Configuration)'=='Release'">
+      <Visible>True</Visible>
+    </Content>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <PlatformToolset>v142</PlatformToolset>
+    <ProjectGuid>0e4646c8-cd38-4dd7-ae6c-bdc71285b4c7</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <PropertyGroup>
+    <EnwikBaseUrl>http://mattmahoney.net/dc/</EnwikBaseUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <EnwikFilename>enwik8.zip</EnwikFilename>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <EnwikFilename>enwik9.zip</EnwikFilename>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>
