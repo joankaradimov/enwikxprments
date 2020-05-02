@@ -38,5 +38,8 @@
     <ClInclude Include="restrictions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="page_revision.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
