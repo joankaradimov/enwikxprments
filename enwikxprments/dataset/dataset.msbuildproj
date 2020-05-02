@@ -47,7 +47,7 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Label="Shared" />
   <PropertyGroup>
-    <EnwikBaseUrl>http://mattmahoney.net/dc/</EnwikBaseUrl>
+    <EnwikBaseUrl>https://cs.fit.edu/~mmahoney/compression/</EnwikBaseUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <EnwikFilename>enwik8.zip</EnwikFilename>
