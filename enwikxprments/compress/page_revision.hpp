@@ -38,10 +38,10 @@ public:
         std::vector<ContributorWithIpAddress> with_ip_address(this->with_ip_address.begin(), this->with_ip_address.end());
         std::vector<ContributorWithIpString> with_ip_string(this->with_ip_string.begin(), this->with_ip_string.end());
 
-        std::ofstream username_id_output("out/contributors_with_username_id");
-        std::ofstream username_username_output("out/contributors_with_username_username");
-        std::ofstream ip_address_output("out/contributors_with_ip_address");
-        std::ofstream ip_string_output("out/contributors_with_ip_string");
+        std::ofstream username_id_output("out/contributors_with_username_id", std::ios::binary);
+        std::ofstream username_username_output("out/contributors_with_username_username", std::ios::binary);
+        std::ofstream ip_address_output("out/contributors_with_ip_address", std::ios::binary);
+        std::ofstream ip_string_output("out/contributors_with_ip_string", std::ios::binary);
 
         for (auto contributor : with_username) {
             username_id_output.write((char*)&contributor.id, sizeof(contributor.id));
@@ -56,10 +56,10 @@ public:
             ip_string_output.write(contributor.address.c_str(), contributor.address.length() + 1);
         }
 
-        std::ofstream page_revisions("out/page_revisions");
-        std::ofstream page_revisions_title("out/page_revisions_title");
-        std::ofstream page_revisions_comment("out/page_revisions_comment");
-        std::ofstream page_revisions_text("out/page_revisions_text");
+        std::ofstream page_revisions("out/page_revisions", std::ios::binary);
+        std::ofstream page_revisions_title("out/page_revisions_title", std::ios::binary);
+        std::ofstream page_revisions_comment("out/page_revisions_comment", std::ios::binary);
+        std::ofstream page_revisions_text("out/page_revisions_text", std::ios::binary);
 
         for (auto page_revision : this->page_revisions) {
             page_revisions_title.write(page_revision.page_title.c_str(), page_revision.page_title.length() + 1);
