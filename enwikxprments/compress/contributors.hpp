@@ -39,7 +39,7 @@ struct Contributors {
 
     template<typename T>
     static size_t get_index(const std::vector<T>& contributors, const T& contributor) {
-        return std::distance(std::lower_bound(contributors.begin(), contributors.end(), contributor), contributors.begin());
+        return std::distance(contributors.begin(), std::lower_bound(contributors.begin(), contributors.end(), contributor));
     }
 
     std::vector<ContributorWithIpAddress> with_ip_address;
