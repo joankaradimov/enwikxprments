@@ -13,8 +13,8 @@ try {
 
             PageRevisions page_revisions;
 
-            page_revisions.parse_xml(path);
-            page_revisions.dump();
+            page_revisions.read_xml(path);
+            page_revisions.write_binary();
         }
         else {
             // TODO: print help;

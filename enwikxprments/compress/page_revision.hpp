@@ -37,7 +37,7 @@ public:
         return page_revisions.back();
     }
 
-    void dump() const {
+    void write_binary() const {
         std::vector<ContributorWithUsername> with_username(this->with_username.begin(), this->with_username.end());
         std::vector<ContributorWithIpAddress> with_ip_address(this->with_ip_address.begin(), this->with_ip_address.end());
         std::vector<ContributorWithIpString> with_ip_string(this->with_ip_string.begin(), this->with_ip_string.end());
@@ -90,7 +90,7 @@ public:
         }
     }
 
-    void parse_xml(const char* filename) {
+    void read_xml(const char* filename) {
         const char* ns = "http://www.mediawiki.org/xml/export-0.3/";
 
         std::ifstream input(filename);
