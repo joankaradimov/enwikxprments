@@ -2,14 +2,25 @@
 
 #include "page_revision.hpp"
 
-int main()
+int main(int argc, char** argv)
 try {
-    const char* input_path = "C:\\Users\\joank\\work\\enwikxprments\\build\\enwik9";
+    for (int arg_index = 1; arg_index < argc; ++arg_index) {
+        std::string arg = argv[arg_index];
 
-    PageRevisions page_revisions;
+        if (arg == "--compress") {
+            ++arg_index;
+            char* path = argv[arg_index];
 
-    page_revisions.parse_xml(input_path);
-    page_revisions.dump();
+            PageRevisions page_revisions;
+
+            page_revisions.parse_xml(path);
+            page_revisions.dump();
+        }
+        else {
+            // TODO: print help;
+            return 1;
+        }
+    }
 }
 catch (xml::parsing & error) {
     std::cout
