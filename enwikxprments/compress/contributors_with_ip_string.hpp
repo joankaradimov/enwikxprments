@@ -5,6 +5,8 @@
 #include "contributor.hpp"
 
 struct ContributorWithIpString : public Contributor {
+	ContributorWithIpString() {}
+
 	ContributorWithIpString(const std::string& address) : address(address) {
 	}
 

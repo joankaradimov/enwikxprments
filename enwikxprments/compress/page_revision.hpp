@@ -33,7 +33,59 @@ public:
     }
 
     void read_binary() {
-        throw std::exception("Not implemented"); // TODO: implement
+        std::vector<ContributorWithUsername> with_username;
+        std::vector<ContributorWithIpAddress> with_ip_address;
+        std::vector<ContributorWithIpString> with_ip_string;
+
+        std::ifstream username_id_input("out/contributors_with_username_id", std::ios::binary);
+        std::ifstream username_username_input("out/contributors_with_username_username", std::ios::binary);
+        while (username_id_input.eof() == false) {
+            ContributorWithUsername contributor;
+            username_id_input.read((char*)&contributor.id, sizeof(contributor.id));
+            username_username_input >> contributor.username;
+            with_username.push_back(contributor);
+        }
+        contributors.swap(with_username);
+
+        std::ifstream ip_address_output("out/contributors_with_ip_address", std::ios::binary);
+        while (ip_address_output.eof() == false) {
+            ContributorWithIpAddress contributor;
+            ip_address_output.read((char*)&contributor.ip, sizeof(contributor.ip));
+            with_ip_address.push_back(contributor);
+        }
+        contributors.swap(with_ip_address);
+
+        std::ifstream ip_string_output("out/contributors_with_ip_string", std::ios::binary);
+        while (ip_string_output.eof() == false) {
+            ContributorWithIpString contributor;
+            ip_string_output >> contributor.address;
+            with_ip_string.push_back(contributor);
+        }
+        contributors.swap(with_ip_string);
+
+        std::ifstream page_revisions_input("out/page_revisions", std::ios::binary);
+        std::ifstream page_revisions_title_input("out/page_revisions_title", std::ios::binary);
+        std::ifstream page_revisions_comment_input("out/page_revisions_comment", std::ios::binary);
+        std::ifstream page_revisions_text_input("out/page_revisions_text", std::ios::binary);
+
+        page_revisions.clear();
+        while (page_revisions_input.eof() == false) {
+            PageRevision page_revision;
+            page_revisions_title_input >> page_revision.page_title;
+            page_revisions_comment_input >> page_revision.revision_comment;
+            page_revisions_text_input >> page_revision.revision_text;
+
+            page_revisions_input.read((char*)&page_revision.page_id, sizeof(page_revision.page_id));
+            page_revisions_input.read((char*)&page_revision.page_restrictions, sizeof(page_revision.page_restrictions));
+            page_revisions_input.read((char*)&page_revision.revision_id, sizeof(page_revision.revision_id));
+            page_revisions_input.read((char*)&page_revision.revision_timestamp, sizeof(page_revision.revision_timestamp));
+
+            size_t contributor_index;
+            page_revisions_input.read((char*)&contributor_index, sizeof(contributor_index));
+            page_revision.contributor = contributors.get(contributor_index);
+
+            page_revisions.push_back(page_revision);
+        }
     }
 
     void write_binary() const {

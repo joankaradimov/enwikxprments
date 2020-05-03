@@ -37,6 +37,24 @@ struct Contributors {
         }
     }
 
+    std::shared_ptr<Contributor> get(size_t index) {
+        if (index < with_username.size()) {
+            return std::shared_ptr<Contributor>(new ContributorWithUsername(with_username[index]));
+        }
+        index -= with_username.size();
+
+        if (index < with_ip_address.size()) {
+            return std::shared_ptr<Contributor>(new ContributorWithIpAddress(with_ip_address[index]));
+        }
+        index -= with_ip_address.size();
+
+        if (index < with_ip_string.size()) {
+            return std::shared_ptr<Contributor>(new ContributorWithIpString(with_ip_string[index]));
+        }
+
+        throw new std::invalid_argument("Invalid contributor index");
+    }
+
     template<typename T>
     static size_t get_index(const std::vector<T>& contributors, const T& contributor) {
         return std::distance(contributors.begin(), std::lower_bound(contributors.begin(), contributors.end(), contributor));

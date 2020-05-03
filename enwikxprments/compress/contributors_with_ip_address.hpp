@@ -8,6 +8,8 @@ union IP {
 };
 
 struct ContributorWithIpAddress: public Contributor {
+	ContributorWithIpAddress() {}
+
 	ContributorWithIpAddress(IP ip): ip(ip) {
 	}
 
