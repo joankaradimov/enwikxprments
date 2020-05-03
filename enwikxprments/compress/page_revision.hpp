@@ -1,16 +1,12 @@
 #pragma once
 
-#include <algorithm>
 #include <fstream>
 #include <set>
 #include <vector>
 
 #include "xml/parser"
 
-#include "contributor.hpp"
-#include "contributors_with_ip_address.hpp"
-#include "contributors_with_ip_string.hpp"
-#include "contributors_with_username.hpp"
+#include "contributors.hpp"
 #include "iso_date_time.hpp"
 #include "restrictions.hpp"
 
@@ -30,7 +26,6 @@ class PageRevisions {
 public:
     void emplace_back(PageRevision& page_revistion) {
         page_revisions.emplace_back(page_revistion);
-        add(*page_revistion.contributor);
     }
 
     PageRevision& back() {
@@ -42,25 +37,21 @@ public:
     }
 
     void write_binary() const {
-        std::vector<ContributorWithUsername> with_username(this->with_username.begin(), this->with_username.end());
-        std::vector<ContributorWithIpAddress> with_ip_address(this->with_ip_address.begin(), this->with_ip_address.end());
-        std::vector<ContributorWithIpString> with_ip_string(this->with_ip_string.begin(), this->with_ip_string.end());
-
         std::ofstream username_id_output("out/contributors_with_username_id", std::ios::binary);
         std::ofstream username_username_output("out/contributors_with_username_username", std::ios::binary);
         std::ofstream ip_address_output("out/contributors_with_ip_address", std::ios::binary);
         std::ofstream ip_string_output("out/contributors_with_ip_string", std::ios::binary);
 
-        for (auto contributor : with_username) {
+        for (auto contributor : contributors.with_username) {
             username_id_output.write((char*)&contributor.id, sizeof(contributor.id));
             username_username_output.write(contributor.username.c_str(), contributor.username.length() + 1);
         }
 
-        for (auto contributor : with_ip_address) {
+        for (auto contributor : contributors.with_ip_address) {
             ip_address_output.write((char*)&contributor.ip, sizeof(contributor.ip));
         }
 
-        for (auto contributor : with_ip_string) {
+        for (auto contributor : contributors.with_ip_string) {
             ip_string_output.write(contributor.address.c_str(), contributor.address.length() + 1);
         }
 
@@ -80,16 +71,7 @@ public:
             page_revisions.write((char*)&page_revision.revision_timestamp, sizeof(page_revision.revision_timestamp));
 
             const Contributor& contributor = *page_revision.contributor;
-            size_t contributor_index;
-            if (auto c = dynamic_cast<const ContributorWithUsername*>(&contributor)) {
-                contributor_index = std::distance(std::lower_bound(with_username.begin(), with_username.end(), *c), with_username.begin());
-            }
-            else if (auto c = dynamic_cast<const ContributorWithIpAddress*>(&contributor)) {
-                contributor_index = with_username.size() + std::distance(std::lower_bound(with_ip_address.begin(), with_ip_address.end(), *c), with_ip_address.begin());
-            }
-            else if (auto c = dynamic_cast<const ContributorWithIpString*>(&contributor)) {
-                contributor_index = with_username.size() + with_ip_address.size() + std::distance(std::lower_bound(with_ip_string.begin(), with_ip_string.end(), *c), with_ip_string.begin());
-            }
+            size_t contributor_index = contributors.get_index(contributor);
             page_revisions.write((char*)&contributor_index, sizeof(contributor_index));
         }
     }
@@ -105,6 +87,9 @@ public:
         }
 
         PageRevision page_revision;
+        std::set<ContributorWithIpAddress> with_ip_address;
+        std::set<ContributorWithIpString> with_ip_string;
+        std::set<ContributorWithUsername> with_username;
 
         try {
             xml::parser enwik_parser(input, filename);
@@ -173,6 +158,7 @@ public:
                                 enwik_parser.next_expect(xml::parser::event_type::end_element);
 
                                 ContributorWithUsername contributor(id, username);
+                                with_username.emplace(contributor);
                                 page_revision.contributor.reset(new ContributorWithUsername(contributor));
                             }
                             else if (enwik_parser.name() == "ip") {
@@ -181,10 +167,12 @@ public:
 
                                 if (sscanf_s(text_element.c_str(), "%hhu.%hhu.%hhu.%hhu", ip.components, ip.components + 1, ip.components + 2, ip.components + 3) == 4) {
                                     ContributorWithIpAddress contributor(ip);
+                                    with_ip_address.emplace(contributor);
                                     page_revision.contributor.reset(new ContributorWithIpAddress(contributor));
                                 }
                                 else {
                                     ContributorWithIpString contributor(text_element);
+                                    with_ip_string.emplace(contributor);
                                     page_revision.contributor.reset(new ContributorWithIpString(contributor));
                                 }
                             }
@@ -224,6 +212,13 @@ public:
             }
             page_revisions.emplace_back(page_revision);
         }
+
+        std::vector<ContributorWithIpAddress> with_ip_address_vector(with_ip_address.begin(), with_ip_address.end());
+        contributors.swap(with_ip_address_vector);
+        std::vector<ContributorWithIpString> with_ip_string_vector(with_ip_string.begin(), with_ip_string.end());
+        contributors.swap(with_ip_string_vector);
+        std::vector<ContributorWithUsername> with_username_vector(with_username.begin(), with_username.end());
+        contributors.swap(with_username_vector);
     }
 
     void write_xml(const char* filepath) {
@@ -231,32 +226,6 @@ public:
     }
 
 private:
-    void add(const ContributorWithUsername& contributor) {
-        with_username.emplace(contributor);
-    }
-
-    void add(const ContributorWithIpAddress& contributor) {
-        with_ip_address.emplace(contributor);
-    }
-
-    void add(const ContributorWithIpString& contributor) {
-        with_ip_string.emplace(contributor);
-    }
-
-    void add(const Contributor& contributor) {
-        if (auto c = dynamic_cast<const ContributorWithUsername*>(&contributor)) {
-            add(*c);
-        }
-        else if (auto c = dynamic_cast<const ContributorWithIpAddress*>(&contributor)) {
-            add(*c);
-        }
-        else if (auto c = dynamic_cast<const ContributorWithIpString*>(&contributor)) {
-            add(*c);
-        }
-    }
-
     std::vector<PageRevision> page_revisions;
-    std::set<ContributorWithUsername> with_username;
-    std::set<ContributorWithIpAddress> with_ip_address;
-    std::set<ContributorWithIpString> with_ip_string;
+    Contributors contributors;
 };
