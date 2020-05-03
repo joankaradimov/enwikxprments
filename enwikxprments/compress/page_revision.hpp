@@ -98,6 +98,12 @@ public:
         const char* ns = "http://www.mediawiki.org/xml/export-0.3/";
 
         std::ifstream input(filename);
+
+        if (!input.is_open()) {
+            auto message = (std::string) "Could not open '" + filename + "'";
+            throw std::invalid_argument(message);
+        }
+
         PageRevision page_revision;
 
         try {

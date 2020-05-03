@@ -31,8 +31,11 @@ try {
         }
     }
 }
-catch (xml::parsing & error) {
+catch (xml::parsing& error) {
     std::cout
         << "Parsing error at position (" << error.line() << "," << error.column()
         << "); message: " << error.description() << std::endl;
+}
+catch (std::exception& error) {
+    std::cout << "An error occurred: " << error.what() << std::endl;
 }
