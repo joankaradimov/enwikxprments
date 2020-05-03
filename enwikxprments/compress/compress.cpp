@@ -16,6 +16,15 @@ try {
             page_revisions.read_xml(path);
             page_revisions.write_binary();
         }
+        else if (arg == "--decompress") {
+            ++arg_index;
+            char* path = argv[arg_index];
+
+            PageRevisions page_revisions;
+
+            page_revisions.read_binary();
+            page_revisions.write_xml(path);
+        }
         else {
             // TODO: print help;
             return 1;

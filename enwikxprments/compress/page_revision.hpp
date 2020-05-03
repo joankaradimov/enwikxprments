@@ -37,6 +37,10 @@ public:
         return page_revisions.back();
     }
 
+    void read_binary() {
+        throw std::exception("Not implemented"); // TODO: implement
+    }
+
     void write_binary() const {
         std::vector<ContributorWithUsername> with_username(this->with_username.begin(), this->with_username.end());
         std::vector<ContributorWithIpAddress> with_ip_address(this->with_ip_address.begin(), this->with_ip_address.end());
@@ -214,6 +218,10 @@ public:
             }
             page_revisions.emplace_back(page_revision);
         }
+    }
+
+    void write_xml(const char* filepath) {
+        throw std::exception("Not implemented"); // TODO: implement
     }
 
 private:
