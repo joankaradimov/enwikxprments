@@ -38,8 +38,8 @@
     }
 
     ol { counter-reset: item; }
-    li{ display: block; }
-    li:before {
+    ol > li{ display: block; }
+    ol > li:before {
       content: counters(item, ".") " ";
       counter-increment: item;
     }
