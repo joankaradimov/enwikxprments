@@ -43,6 +43,10 @@
       content: counters(item, ".") " ";
       counter-increment: item;
     }
+
+    pre {
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body style="width: 800px; margin: auto;">
@@ -207,7 +211,7 @@
       <li>
         Наборите от данни <i>enwikX</i>
         <ol>
-          <li>WikiMedia XML</li>
+          <li>MediaWiki page export format</li>
           <li>Wikitext</li>
           <li>Изследване на данните</li>
         </ol>
@@ -260,9 +264,76 @@
 
     <h3>Теорема за най-бърз и най-кратък алгоритъм</h3>
 
-    <h2>Наборите от данни enwikX</h2>
+    <h2>Наборите от данни <i>enwikX</i></h2>
 
-    <h3>WikiMedia XML</h3>
+    <p>
+      Съществуват няколко набора от данни, носещи подобните имена: <i>enwik6</i>, <i>enwik7</i>, <i>enwik8</i>,
+      <i>enwik9</i>, и <i>enwik10</i>. Общият вид на имената е enwikX, където X ∈ {5, 6, 7, 8, 9}. Всеки от тях
+      представлява първите 10<sup>X</sup> байта от една определена текстова репрезентация на свободно достъпната
+      енциклопедия Wikipedia. Данните са взети единствено от англоезичната версия.
+    </p>
+
+    <p>
+      Въпросните набори от данни са широко използвани в
+      изследвания в областта на ИИ, и по-конкретно - в областите на моделиране и синтез на естествени езици. Честият
+      избор, на набори от данни базирани на Wikipedia, при тези изследвания, е продиктуван от няколко фактора:
+      <ul>
+        <li>
+          Данните са достъпни под два лиценза - "GNU Free Documentation License" и "Creative Commons Attribution-ShareAlike".
+          И двата позволяващи употребата и разпространението на данните с много малко ограничения.
+        </li>
+        <li>
+          Данните имат относително високото качество, често с множество автори и редактори за всяка от статиите.
+        </li>
+        <li>
+          Данните са взети от файл, чиито оригинален размер е 4.8 GiB - над 2 500 000 страници текст, при 2000
+          символа на страница - безспорно значително количество текст.
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      Трябва да се отбележи, че данните са във вида, в който са съществували в Wikipedia на 3 март 2006. Към момента
+      обемът на Wikipedia е над 4 пъти по-голям. Разумно е и да спекулираме, че качеството на статиите се е повишило.
+      Но въпреки това, enwikX не се обновяват &ndash; това гарантира консистентност на изследванията във времето.
+    </p>
+
+    <h3>MediaWiki page export format</h3>
+
+    <p>
+      Преди започване на изследване на данните, е добре да се разгледа репрезентацията им. Вече беше споменато, че
+      наборът от данни е текстов, но не беше уточнен конкретен формат и съдържание. Те ще бъдат предмет на интерес
+      занапред, и заслужава да бъдат разгледани по-подробно. Първите 1000 символа могат да бъдат получени с Unix
+      командата "<i>head -c 1000 enwik9</i>":
+
+      <pre>
+        <code>
+&lt;mediawiki xmlns=&quot;http://www.mediawiki.org/xml/export-0.3/&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://www.mediawiki.org/xml/export-0.3/ http://www.mediawiki.org/xml/export-0.3.xsd&quot; version=&quot;0.3&quot; xml:lang=&quot;en&quot;&gt;
+&lt;siteinfo&gt;
+  &lt;sitename&gt;Wikipedia&lt;/sitename&gt;
+  &lt;base&gt;http://en.wikipedia.org/wiki/Main_Page&lt;/base&gt;
+  &lt;generator&gt;MediaWiki 1.6alpha&lt;/generator&gt;
+  &lt;case&gt;first-letter&lt;/case&gt;
+    &lt;namespaces&gt;
+    &lt;namespace key=&quot;-2&quot;&gt;Media&lt;/namespace&gt;
+    &lt;namespace key=&quot;-1&quot;&gt;Special&lt;/namespace&gt;
+    &lt;namespace key=&quot;0&quot; /&gt;
+    &lt;namespace key=&quot;1&quot;&gt;Talk&lt;/namespace&gt;
+    &lt;namespace key=&quot;2&quot;&gt;User&lt;/namespace&gt;
+    &lt;namespace key=&quot;3&quot;&gt;User talk&lt;/namespace&gt;
+    &lt;namespace key=&quot;4&quot;&gt;Wikipedia&lt;/namespace&gt;
+    &lt;namespace key=&quot;5&quot;&gt;Wikipedia talk&lt;/namespace&gt;
+    &lt;namespace key=&quot;6&quot;&gt;Image&lt;/namespace&gt;
+    &lt;namespace key=&quot;7&quot;&gt;Image talk&lt;/namespace&gt;
+    &lt;namespace key=&quot;8&quot;&gt;MediaWiki&lt;/namespace&gt;
+    &lt;namespace key=&quot;9&quot;&gt;MediaWiki talk&lt;/namespace&gt;
+    &lt;namespa
+        </code>
+      </pre>
+
+      Моментално е видно, че става въпрос за XML-базиран формат. Форматът се нарича <i>MediaWiki page export format</i>
+      (todo: превод в допълнение на официалното английско име на формата?)...
+    </p>
 
     <h3>Wikitext</h3>
 
