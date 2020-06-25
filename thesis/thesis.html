@@ -303,8 +303,8 @@
     <p>
       Преди започване на изследване на данните, е добре да се разгледа репрезентацията им. Вече беше споменато, че
       наборът от данни е текстов, но не беше уточнен конкретен формат и съдържание. Те ще бъдат предмет на интерес
-      занапред, и заслужава да бъдат разгледани по-подробно. Първите 1000 символа могат да бъдат получени с Unix
-      командата "<i>head -c 1000 enwik9</i>":
+      занапред, и заслужава да бъдат разгледани по-подробно. Първите 15 реда могат да бъдат получени с Unix
+      командата "<i>head -n 15 enwik9</i>":
 
       <pre>
         <code>
@@ -323,16 +323,49 @@
     &lt;namespace key=&quot;3&quot;&gt;User talk&lt;/namespace&gt;
     &lt;namespace key=&quot;4&quot;&gt;Wikipedia&lt;/namespace&gt;
     &lt;namespace key=&quot;5&quot;&gt;Wikipedia talk&lt;/namespace&gt;
-    &lt;namespace key=&quot;6&quot;&gt;Image&lt;/namespace&gt;
-    &lt;namespace key=&quot;7&quot;&gt;Image talk&lt;/namespace&gt;
-    &lt;namespace key=&quot;8&quot;&gt;MediaWiki&lt;/namespace&gt;
-    &lt;namespace key=&quot;9&quot;&gt;MediaWiki talk&lt;/namespace&gt;
-    &lt;namespa
         </code>
       </pre>
 
       Моментално е видно, че става въпрос за XML-базиран формат. Форматът се нарича <i>MediaWiki page export format</i>
-      (todo: превод в допълнение на официалното английско име на формата?)...
+      (todo: превод в допълнение на официалното английско име на формата?) и съдържа статии, метаданни за статиите,
+      както и общи метаданни. Откъсът по-горе описва общи метаданни, и по-специално в случая - името на сайта,
+      адресът му, версията на използвания формат, както и част от основните секции в Wikipedia.
+    </p>
+
+    <p>
+      По-напред в съдържанието се намират данни и за самите статии. Например - редове от 120 до 140 могат да бъдат
+      разгледани чрез "<i>head -n 120 enwik9 | tail -n 20</i>"
+
+      <pre>
+        <code>
+&lt;/revision&gt;
+&lt;/page&gt;
+&lt;page&gt;
+  &lt;title&gt;AdA&lt;/title&gt;
+  &lt;id&gt;11&lt;/id&gt;
+  &lt;revision&gt;
+    &lt;id&gt;15898946&lt;/id&gt;
+    &lt;timestamp&gt;2002-09-22T16:02:58Z&lt;/timestamp&gt;
+    &lt;contributor&gt;
+      &lt;username&gt;Andre Engels&lt;/username&gt;
+      &lt;id&gt;300&lt;/id&gt;
+    &lt;/contributor&gt;
+    &lt;minor /&gt;
+    &lt;text xml:space=&quot;preserve&quot;&gt;#REDIRECT [[Ada programming language]]&lt;/text&gt;
+  &lt;/revision&gt;
+&lt;/page&gt;
+&lt;page&gt;
+  &lt;title&gt;Anarchism&lt;/title&gt;
+  &lt;id&gt;12&lt;/id&gt;
+  &lt;revision&gt;
+        </code>
+      </pre>
+
+      Това е статия за програмния език Ада. Като метаданни могат да бъдат открити името на статията и уникалния ѝ числов
+      идентификатор. Прави впечатление XML етикета '&lt;revision&gt;'. Причината за съществуването му е, че Wikipedia
+      поддържа история от редакциите на всяка статия, наричани ревизии. В <i>enwikX</i> наборите от данни,
+      винаги присъства единствено последната ревизия. Това е и мястото, на което могат да бъдат открити някои от
+      най-важните данни - уникален числов идентификатор на ревизията, време на създаване, автор и текста на статията.
     </p>
 
     <h3>Wikitext</h3>
