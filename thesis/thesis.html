@@ -45,6 +45,7 @@
 
     pre {
       white-space: pre-wrap;
+      word-break: break-word;
     }
   </style>
 </head>
@@ -386,6 +387,32 @@
     </p>
 
     <h3>Wikitext</h3>
+
+    <p>
+      В примера по-горе, текстът на примерната статия е "#REDIRECT [[Ada programming language]]". Очевидно пунктуацията
+      и специалните символи са повече, отколкото бихме очаквали, от текст на естествен език. Причината е, че текстът е
+      във формат Wikitext &ndash; markup (todo: превод) език специално създаден за целите на Wikipedia. (todo: да разкажа за markup езици и за подобни формати, може би?)
+    </p>
+
+    <p>
+      Форматът позволява декларирането на секции, подсекции, връзки към други статии и техни секции, автоматично
+      пренасочване към други статии и техни секции, влагане на изображения, списъци с подточки, таблици и други.
+      Между редове 135 и 140, например, може да бъде открито:
+
+      <pre>
+        <code>
+          The word '''anarchism''' is [[etymology|derived from]] the [[Greek language|Greek]] ''[[Wiktionary:&amp;amp;#945;&amp;amp;#957;&amp;amp;#945;&amp;amp;#961;&amp;amp;#967;&amp;amp;#943;&amp;amp;#945;|&amp;amp;#945;&amp;amp;#957;&amp;amp;#945;&amp;amp;#961;&amp;amp;#967;&amp;amp;#943;&amp;amp;#945;]]'' (&amp;quot;without [[archon]]s (ruler, chief, king)&amp;quot;). Anarchism as a [[political philosophy]], is the belief that ''rulers'' are unnecessary and should be abolished, although there are differing interpretations of what this means. Anarchism also refers to related [[social movement]]s) that advocate the elimination of authoritarian institutions, particularly the [[state]].&amp;lt;ref&amp;gt;[http://en.wikiquote.org/wiki/Definitions_of_anarchism Definitions of anarchism] on Wikiquote, accessed 2006&amp;lt;/ref&amp;gt; The word &amp;quot;[[anarchy]],&amp;quot; as most anarchists use it, does not imply [[chaos]], [[nihilism]], or [[anomie]], but rather a harmonious [[anti-authoritarian]] society. In place of what are regarded as authoritarian political structures and coercive economic institutions, anarchists advocate social relations based upon [[voluntary association]] of autonomous individuals, [[mutual aid]], and [[self-governance]].
+
+          While anarchism is most easily defined by what it is against, anarchists also offer positive visions of what they believe to be a truly free society. However, ideas about how an anarchist society might work vary considerably, especially with respect to economics; there is also disagreement about how a free society might be brought about.
+        </code>
+      </pre>
+
+      Откъсът съдържа примери за връзки към други статии и техни секции (оградени с двойни квадратни скоби), удебелен
+      текст (тройки кавички) и други. Присъствието на толкова много специални символи, поставя под въпрос
+      съпоставимостта с базовата (todo: превод на baseline) оценка от между 0.6 и 1.3 бита за символ, която Шанън дава.
+      Оценката, както вече беше споменато, е за азбука от 27 символа, която игнорира числа, пунктуация, големи и малки букви
+      и други възможно специални или служебни символи. Това поставя въпроса - какво може да бъде видяно в данните?
+    </p>
 
     <h3>Изследване на данните</h3>
 
