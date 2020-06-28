@@ -43,6 +43,10 @@
       counter-increment: item;
     }
 
+    .references li:before {
+      content: "[" counters(item, '') "]";
+    }
+
     pre {
       white-space: pre-wrap;
       word-break: break-word;
@@ -481,59 +485,59 @@
     </p>
   </div>
 
-  <div class="page">
+  <div class="page references">
     <h2>Библиография</h2>
-    <div style="font-size: x-small;">
-      <div id="reference-turing-test">
-        [x] Turing, Alan Mathison (July 1950). "COMPUTING MACHINERY AND INTELLIGENCE". Computing Machinery and Intelligence. Mind 49: 433-460.
-      </div>
-      <div id="reference-employment-test">
-        [x] Nilsson, Nils John (WINTER 2005). "Human-Level Artificial Intelligence? Be Serious!". AI MAGAZINE
-      </div>
-      <div id="reference-robot-college-test">
-        [x] Ben Goertzel (5 September 2012). "What counts as a conscious thinking machine?". NewScientist Magazine issue 2881;
+    <ol style="font-size: x-small;">
+      <li id="reference-turing-test">
+        Turing, Alan Mathison (July 1950). "COMPUTING MACHINERY AND INTELLIGENCE". Computing Machinery and Intelligence. Mind 49: 433-460.
+      </li>
+      <li id="reference-employment-test">
+        Nilsson, Nils John (WINTER 2005). "Human-Level Artificial Intelligence? Be Serious!". AI MAGAZINE
+      </li>
+      <li id="reference-robot-college-test">
+        Ben Goertzel (5 September 2012). "What counts as a conscious thinking machine?". NewScientist Magazine issue 2881;
         https://www.newscientist.com/article/mg21528813-600-what-counts-as-a-conscious-thinking-machine/
-      </div>
-      <div id="reference-mc-carthy-on-intelligence">
-        [x] McCarthy, John (12 November 12 2007). "WHAT IS ARTIFICIAL INTELLIGENCE?".
+      </li>
+      <li id="reference-mc-carthy-on-intelligence">
+        McCarthy, John (12 November 12 2007). "WHAT IS ARTIFICIAL INTELLIGENCE?".
         http://www-formal.stanford.edu/jmc/whatisai/node1.html
-      </div>
-      <div id="reference-hutter-ai-theory">
+      </li>
+      <li id="reference-hutter-ai-theory">
         Hutter, Marcus (September 2001). "Towards a Universal Theory of Artificial Intelligence based on Algorithmic Probability and Sequential Decisions",
         Lecture Notes in Artificial Intelligence (LNAI 2167), Proc. 12th Eurpean Conf. on Machine Learning, ECML (2001) 226--238
-      </div>
-      <div id="reference-mahoney-on-compression">
+      </li>
+      <li id="reference-mahoney-on-compression">
         Mahoney, Matt (20 August 2006). "Rationale for a Large Text Compression Benchmark",
         https://cs.fit.edu/~mmahoney/compression/rationale.html
-      </div>
-      <div id="reference-hutter-incomputablility">
-        [x] Jan Leike and Marcus Hutter (20 October 2015). "On the Computability of AIXI". UAI 2015. arXiv:1510.05572
-      </div>
-      <div id="reference-shannon-human-baseline">
+      </li>
+      <li id="reference-hutter-incomputablility">
+        Jan Leike and Marcus Hutter (20 October 2015). "On the Computability of AIXI". UAI 2015. arXiv:1510.05572
+      </li>
+      <li id="reference-shannon-human-baseline">
         Shannon, Cluade E. (15 September 1950). “Prediction and Entropy of Printed English”, Bell Sys. Tech. J (3) p. 50-64, 1950.
-      </div>
-      <div id="reference-unreasonable-rnn-effectiveness">
-        [x] Karpathy, Andrej (21 May 2015). "The Unreasonable Effectiveness of Recurrent Neural Networks"
+      </li>
+      <li id="reference-unreasonable-rnn-effectiveness">
+        Karpathy, Andrej (21 May 2015). "The Unreasonable Effectiveness of Recurrent Neural Networks"
         http://karpathy.github.io/2015/05/21/rnn-effectiveness/
-      </div>
-      <div id="reference-jim-bowery-c-prize">
-        [x] Bowery, Jim (May 2005) "The C-Prize",
+      </li>
+      <li id="reference-jim-bowery-c-prize">
+        Bowery, Jim (May 2005) "The C-Prize",
         https://groups.google.com/forum/#!topic/comp.compression/JHxrwaMMkv0
-      </div>
-      <div id="reference-hutter-prize">
-        [x] Hutter, Marcus (March 2006) "50'000€ Prize for Compressing Human Knowledge",
+      </li>
+      <li id="reference-hutter-prize">
+        Hutter, Marcus (March 2006) "50'000€ Prize for Compressing Human Knowledge",
         http://prize.hutter1.net/
-      </div>
-      <div id="reference-media-wiki-xml-xsd">
-        [x] Wikimedia Foundation. MediaWiki's page export format XML schema
+      </li>
+      <li id="reference-media-wiki-xml-xsd">
+        Wikimedia Foundation. MediaWiki's page export format XML schema
         https://www.mediawiki.org/xml/export-0.10.xsd
-      </div>
-      <div id="reference-1">
-        [1] Shannon, Claude Elwood (July 1948). "A Mathematical Theory of Communication". Bell System Technical Journal. 27 (3): 379–423
-      </div>
-      <div id="reference-2">
-        [2] Shannon, Claude Elwood (October 1948). "A Mathematical Theory of Communication". Bell System Technical Journal. 27 (4): 623–666
-      </div>
-    </div>
+      </li>
+      <li id="reference-1">
+        Shannon, Claude Elwood (July 1948). "A Mathematical Theory of Communication". Bell System Technical Journal. 27 (3): 379–423
+      </li>
+      <li id="reference-2">
+        Shannon, Claude Elwood (October 1948). "A Mathematical Theory of Communication". Bell System Technical Journal. 27 (4): 623–666
+      </li>
+    </ol>
   </div>
 </body>
