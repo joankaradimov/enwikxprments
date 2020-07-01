@@ -36,16 +36,13 @@
       font-size: 7px;
     }
 
-    ol { counter-reset: item; }
-    ol > li { display: block; }
-    ol > li:before {
-      content: counters(item, ".") " ";
-      counter-increment: item;
-    }
+    .contents ol { counter-reset: item; }
+    .contents ol > li { display: block; }
+    .contents ol > li:before { content: counters(item, ".") " "; counter-increment: item; }
 
-    .references li:before {
-      content: "[" counters(item, '') "]";
-    }
+    .references ol { counter-reset: item; }
+    .references ol > li { display: block; }
+    .references ol > li:before { content: "[" counters(item, '') "]"; counter-increment: item; }
 
     pre {
       white-space: pre-wrap;
@@ -255,7 +252,7 @@
     </p>
   </div>
 
-  <div class="page">
+  <div class="page contents">
     <h2>2. Съдържание -- TODO</h2>
     <ol>
       <li>
