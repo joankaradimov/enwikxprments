@@ -63,25 +63,30 @@ public:
         }
         contributors.swap(with_ip_string);
 
-        std::ifstream page_revisions_input("out/page_revisions", std::ios::binary);
+        std::ifstream page_revisions_page_id_input("out/page_revisions_page_id", std::ios::binary);
+        std::ifstream page_revisions_page_restrictions_input("out/page_revisions_page_restrictions", std::ios::binary);
+        std::ifstream page_revisions_revision_id_input("out/page_revisions_revision_id", std::ios::binary);
+        std::ifstream page_revisions_revision_timestamp_input("out/page_revisions_revision_timestamp", std::ios::binary);
+        std::ifstream page_revisions_contributor_index_input("out/page_revisions_contributor_index", std::ios::binary);
+
         std::ifstream page_revisions_title_input("out/page_revisions_title", std::ios::binary);
         std::ifstream page_revisions_comment_input("out/page_revisions_comment", std::ios::binary);
         std::ifstream page_revisions_text_input("out/page_revisions_text", std::ios::binary);
 
         page_revisions.clear();
-        while (page_revisions_input.eof() == false) {
+        while (page_revisions_page_id_input.eof() == false) {
             PageRevision page_revision;
             page_revisions_title_input >> page_revision.page_title;
             page_revisions_comment_input >> page_revision.revision_comment;
             page_revisions_text_input >> page_revision.revision_text;
 
-            page_revisions_input.read((char*)&page_revision.page_id, sizeof(page_revision.page_id));
-            page_revisions_input.read((char*)&page_revision.page_restrictions, sizeof(page_revision.page_restrictions));
-            page_revisions_input.read((char*)&page_revision.revision_id, sizeof(page_revision.revision_id));
-            page_revisions_input.read((char*)&page_revision.revision_timestamp, sizeof(page_revision.revision_timestamp));
+            page_revisions_page_id_input.read((char*)&page_revision.page_id, sizeof(page_revision.page_id));
+            page_revisions_page_restrictions_input.read((char*)&page_revision.page_restrictions, sizeof(page_revision.page_restrictions));
+            page_revisions_revision_id_input.read((char*)&page_revision.revision_id, sizeof(page_revision.revision_id));
+            page_revisions_revision_timestamp_input.read((char*)&page_revision.revision_timestamp, sizeof(page_revision.revision_timestamp));
 
             size_t contributor_index;
-            page_revisions_input.read((char*)&contributor_index, sizeof(contributor_index));
+            page_revisions_contributor_index_input.read((char*)&contributor_index, sizeof(contributor_index));
             page_revision.contributor = contributors.get(contributor_index);
 
             page_revisions.push_back(page_revision);
@@ -107,7 +112,11 @@ public:
             ip_string_output.write(contributor.address.c_str(), contributor.address.length() + 1);
         }
 
-        std::ofstream page_revisions_output("out/page_revisions", std::ios::binary);
+        std::ofstream page_revisions_page_id_output("out/page_revisions_page_id", std::ios::binary);
+        std::ofstream page_revisions_page_restrictions_output("out/page_revisions_page_restrictions", std::ios::binary);
+        std::ofstream page_revisions_revision_id_output("out/page_revisions_revision_id", std::ios::binary);
+        std::ofstream page_revisions_revision_timestamp_output("out/page_revisions_revision_timestamp", std::ios::binary);
+        std::ofstream page_revisions_contributor_index_output("out/page_revisions_contributor_index", std::ios::binary);
         std::ofstream page_revisions_title_output("out/page_revisions_title", std::ios::binary);
         std::ofstream page_revisions_comment_output("out/page_revisions_comment", std::ios::binary);
         std::ofstream page_revisions_text_output("out/page_revisions_text", std::ios::binary);
@@ -117,14 +126,14 @@ public:
             page_revisions_comment_output.write(page_revision.revision_comment.c_str(), page_revision.revision_comment.length() + 1);
             page_revisions_text_output.write(page_revision.revision_text.c_str(), page_revision.revision_text.length() + 1);
 
-            page_revisions_output.write((char*)&page_revision.page_id, sizeof(page_revision.page_id));
-            page_revisions_output.write((char*)&page_revision.page_restrictions, sizeof(page_revision.page_restrictions));
-            page_revisions_output.write((char*)&page_revision.revision_id, sizeof(page_revision.revision_id));
-            page_revisions_output.write((char*)&page_revision.revision_timestamp, sizeof(page_revision.revision_timestamp));
+            page_revisions_page_id_output.write((char*)&page_revision.page_id, sizeof(page_revision.page_id));
+            page_revisions_page_restrictions_output.write((char*)&page_revision.page_restrictions, sizeof(page_revision.page_restrictions));
+            page_revisions_revision_id_output.write((char*)&page_revision.revision_id, sizeof(page_revision.revision_id));
+            page_revisions_revision_timestamp_output.write((char*)&page_revision.revision_timestamp, sizeof(page_revision.revision_timestamp));
 
             const Contributor& contributor = *page_revision.contributor;
             size_t contributor_index = contributors.get_index(contributor);
-            page_revisions_output.write((char*)&contributor_index, sizeof(contributor_index));
+            page_revisions_contributor_index_output.write((char*)&contributor_index, sizeof(contributor_index));
         }
     }
 
