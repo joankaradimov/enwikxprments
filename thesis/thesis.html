@@ -49,6 +49,27 @@
       word-break: break-word;
     }
   </style>
+
+  <script>
+MathJax = {
+  options: {
+    renderActions: {
+      find: [10, function (doc) {
+        for (var node of document.querySelectorAll('script[type^="math/tex"]')) {
+          var display = !!node.type.match(/; *mode=display/);
+          var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+          var text = document.createTextNode('');
+          node.parentNode.replaceChild(text, node);
+          math.start = {node: text, delim: '', n: 0};
+          math.end = {node: text, delim: '', n: 0};
+          doc.math.push(math);
+        }
+      }, '']
+    }
+  }
+};
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body style="width: 800px; margin: auto;">
   <div class="page" style="text-align: center;">
