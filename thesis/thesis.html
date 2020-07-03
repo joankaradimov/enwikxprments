@@ -2,15 +2,20 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
   <link href="prism-vs.css" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-      text-justify: auto;
-    }
+    * { box-sizing: border-box; }
+
+    p { text-align: justify; }
+
+    h1 { font-size: 3rem; text-align: center; }
+    h2 { font-size: 2rem; text-align: center; }
+    h3 { font-size: 1.8rem; }
+    h3 { font-size: 1.5rem; }
+    sup { font-size: .5rem; }
 
     @page {
       size: A4;
-      padding: 2cm;
-      margin: 1cm auto;
+      padding: 2cm 5cm;
+      margin: 3cm auto;
     }
 
     .pages {
@@ -24,6 +29,8 @@
 
     @media print {
       .pages {
+        padding: 0 2cm;
+        margin: 0 auto;
         border: initial;
         border-radius: initial;
         width: initial;
@@ -34,17 +41,22 @@
       }
     }
 
-    sup {
-      font-size: 7px;
-    }
-
     .contents ol { counter-reset: item; }
     .contents ol > li { display: block; }
-    .contents ol > li:before { content: counters(item, ".") " "; counter-increment: item; }
+    .contents ol > li:before {
+      content: counters(item, ".") " ";
+      counter-increment: item;
+    }
 
-    .references ol { counter-reset: item; }
-    .references ol > li { display: block; }
-    .references ol > li:before { content: "[" counters(item, '') "]"; counter-increment: item; }
+    .references ol { counter-reset: item; font-size: 12px; padding-left: 0; }
+    .references ol > li { display: block; padding-left: 30px;}
+    .references ol > li:before {
+      content: "[" counters(item, '') "]";
+      counter-increment: item;
+      margin-left: -25px;
+      min-width: 22px;
+      display: inline-block;
+    }
 
     pre[class*="language-"] {
       border: none;
@@ -80,20 +92,20 @@ MathJax = {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
 </head>
-<body style="width: 800px; margin: auto;">
+<body>
   <div class="pages" style="text-align: center;">
     <h1>
       Компресиране на някои представяния на знание с приложение на рекурентни невронни мрежи
     </h1>
-    <p>ТОДО: дата, име, ръководител, катедра(?)</p>
+    <div>ТОДО: дата, име, ръководител, катедра(?)</div>
     <i>
       <div>joan.karadimov@gmail.com</div>
       <div>Факултет по математика и информатика</div>
       <div>Софийски Университет</div>
     </i>
 
-    <p style="text-align: center; font-weight: bold;">Абстракт</p>
-    <div style="text-align: center;">TODO</div>
+    <div style="font-weight: bold;">Абстракт</div>
+    <div>TODO</div>
   </div>
 
   <div class="pages">
@@ -522,6 +534,7 @@ MathJax = {
       Форматът позволява декларирането на секции, подсекции, връзки към други статии и техни секции, автоматично
       пренасочване към други статии и техни секции, влагане на изображения, списъци с подточки, таблици и други.
       Между редове 135 и 140, например, може да бъде открито:
+    </p>
 
       <pre>
         <code class="language-wiki">
@@ -531,6 +544,7 @@ MathJax = {
         </code>
       </pre>
 
+    <p>
       Откъсът съдържа примери за връзки към други статии и техни секции (оградени с двойни квадратни скоби), удебелен
       текст (тройки кавички) и други. Присъствието на толкова много специални символи, поставя под въпрос
       съпоставимостта с базовата (todo: превод на baseline) оценка от между 0.6 и 1.3 бита за символ, която Шанън дава.
@@ -540,9 +554,11 @@ MathJax = {
 
     <h3>Изследване на данните</h3>
 
-    Разглеждайки <i>enwikX</i> наборите от данни, както и тяхната XML схема, може да се достигне до списък от имена на
-    полета с метаданни. В търсенето на подход за компресия, от значение са типовете на въпросните метаданни. Чрез
-    кратка помощна програма, са изчислени и приложени сумарните размерите на данните, разбити по поле.
+    <p>
+      Разглеждайки <i>enwikX</i> наборите от данни, както и тяхната XML схема, може да се достигне до списък от имена на
+      полета с метаданни. В търсенето на подход за компресия, от значение са типовете на въпросните метаданни. Чрез
+      кратка помощна програма, са изчислени и приложени сумарните размерите на данните, разбити по поле.
+    </p>
 
     <ul>
       <li>
@@ -632,8 +648,10 @@ MathJax = {
 
     <h4 style="clear: both; padding-top: 60px;">Статии</h4>
 
-    Общият брой статии е 243427. При общ брой байтове 888134586, кодирани в UTF-8, броят символи е 885671734.
-    Средният брой символи за статия е ~3638.35, Максималният e 738818, а минималният е 0.
+    <p>
+      Общият брой статии е 243427. При общ брой байтове 888134586, кодирани в UTF-8, броят символи е 885671734.
+      Средният брой символи за статия е ~3638.35, Максималният e 738818, а минималният е 0.
+    </p>
 
     <div>
       <div style="float: left; margin: 10px 30px 0 0;">
@@ -641,10 +659,12 @@ MathJax = {
         <i style="display: block; padding-left: 30px;">(фиг. 6)</i>
       </div>
 
-      На <i>фиг. 6</i> по хоризонтала са изобразени възможните дължини на статии (логаритмична скала), а по вертикала -
-      броят статии със съответната дължина. Наблюдава се максимум при около 30 символа. Освен това повечето статии имат
-      под 100 символа. Това подсказва, че по-късно, при формирането на batch-ове (todo-translate), дължини над 100
-      би трябвало да са достатъчни, за да бъде трениран модела с цялостния текст на повечето статии.
+      <p>
+        На <i>фиг. 6</i> по хоризонтала са изобразени възможните дължини на статии (логаритмична скала), а по вертикала -
+        броят статии със съответната дължина. Наблюдава се максимум при около 30 символа. Освен това повечето статии имат
+        под 100 символа. Това подсказва, че по-късно, при формирането на batch-ове (todo-translate), дължини над 100
+        би трябвало да са достатъчни, за да бъде трениран модела с цялостния текст на повечето статии.
+      </p>
     </div>
 
     <h4 style="clear: both; padding-top: 60px;">Автори</h4>
@@ -903,7 +923,7 @@ MathJax = {
 
   <div class="pages references">
     <h2>Библиография</h2>
-    <ol style="font-size: x-small;">
+    <ol>
       <li id="reference-turing-test">
         Turing, Alan Mathison (July 1950). "COMPUTING MACHINERY AND INTELLIGENCE". Computing Machinery and Intelligence. Mind 49: 433-460.
       </li>
