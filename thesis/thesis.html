@@ -1,4 +1,6 @@
 <head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css" rel="stylesheet" />
+  <link href="prism-vs.css" rel="stylesheet" />
   <style>
     * {
       box-sizing: border-box;
@@ -44,7 +46,12 @@
     .references ol > li { display: block; }
     .references ol > li:before { content: "[" counters(item, '') "]"; counter-increment: item; }
 
-    pre {
+    pre[class*="language-"] {
+      border: none;
+      overflow: hidden;
+    }
+
+    code[class*="language-"] {
       white-space: pre-wrap;
       word-break: break-word;
     }
@@ -70,6 +77,8 @@ MathJax = {
 };
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
 </head>
 <body style="width: 800px; margin: auto;">
   <div class="pages" style="text-align: center;">
@@ -431,7 +440,7 @@ MathJax = {
       командата "<i>head -n 15 enwik9</i>":
 
       <pre>
-        <code>
+        <code class="language-xml">
 &lt;mediawiki xmlns=&quot;http://www.mediawiki.org/xml/export-0.3/&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://www.mediawiki.org/xml/export-0.3/ http://www.mediawiki.org/xml/export-0.3.xsd&quot; version=&quot;0.3&quot; xml:lang=&quot;en&quot;&gt;
 &lt;siteinfo&gt;
   &lt;sitename&gt;Wikipedia&lt;/sitename&gt;
@@ -469,7 +478,7 @@ MathJax = {
       разгледани чрез "<i>head -n 120 enwik9 | tail -n 20</i>"
 
       <pre>
-        <code>
+        <code class="language-xml">
 &lt;/revision&gt;
 &lt;/page&gt;
 &lt;page&gt;
@@ -515,7 +524,7 @@ MathJax = {
       Между редове 135 и 140, например, може да бъде открито:
 
       <pre>
-        <code>
+        <code class="language-wiki">
           The word '''anarchism''' is [[etymology|derived from]] the [[Greek language|Greek]] ''[[Wiktionary:&amp;amp;#945;&amp;amp;#957;&amp;amp;#945;&amp;amp;#961;&amp;amp;#967;&amp;amp;#943;&amp;amp;#945;|&amp;amp;#945;&amp;amp;#957;&amp;amp;#945;&amp;amp;#961;&amp;amp;#967;&amp;amp;#943;&amp;amp;#945;]]'' (&amp;quot;without [[archon]]s (ruler, chief, king)&amp;quot;). Anarchism as a [[political philosophy]], is the belief that ''rulers'' are unnecessary and should be abolished, although there are differing interpretations of what this means. Anarchism also refers to related [[social movement]]s) that advocate the elimination of authoritarian institutions, particularly the [[state]].&amp;lt;ref&amp;gt;[http://en.wikiquote.org/wiki/Definitions_of_anarchism Definitions of anarchism] on Wikiquote, accessed 2006&amp;lt;/ref&amp;gt; The word &amp;quot;[[anarchy]],&amp;quot; as most anarchists use it, does not imply [[chaos]], [[nihilism]], or [[anomie]], but rather a harmonious [[anti-authoritarian]] society. In place of what are regarded as authoritarian political structures and coercive economic institutions, anarchists advocate social relations based upon [[voluntary association]] of autonomous individuals, [[mutual aid]], and [[self-governance]].
 
           While anarchism is most easily defined by what it is against, anarchists also offer positive visions of what they believe to be a truly free society. However, ideas about how an anarchist society might work vary considerably, especially with respect to economics; there is also disagreement about how a free society might be brought about.
