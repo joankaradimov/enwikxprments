@@ -864,10 +864,38 @@ MathJax = {
 
     <h3>Текущи най-добри резултати</h3>
 
-    <div>ЧЕРНОВА</div>
-    <div>най-добрият постигнат резултат, към момента, е 116 673 681 байта.</div>
-    <div>https://github.com/sebastianruder/NLP-progress</div>
-    <div>http://mattmahoney.net/dc/text.html</div>
+    <p>
+      В текущия си вид, Hutter Prize има единствен победител&mdash;Александър Ратушняк на 4 юли 2019 с алгоритъма
+      <i>phda9</i> (версия 1.8). Достигнатият размер е 116673681 байта<a href="#reference-hutter-prize"><sup>[x]</sup></a>.
+    </p>
+
+    <p>
+      В предишни итерации на състезанието, когато използваният набор от данни е <i>enwik8</i>, победители са:
+    </p>
+
+    <ul>
+      <li>4 ноември 2017 - Александър Ратушняк. Размер&mdash;15284944 байта,  достигнат с алгоритъма <i>phda9</i>;</li>
+      <li>23 май 2009 - Александър Ратушняк. Размер&mdash;15949688 байта,  достигнат с алгоритъма <i>decomp8</i>;</li>
+      <li>14 май 2007 - Александър Ратушняк. Размер&mdash;16481655 байта,  достигнат с алгоритъма <i>paq8hp12</i>;</li>
+      <li>25 септември 2006 - Александър Ратушняк. Размер&mdash;байта,  17073018 достигнат с алгоритъма <i>paq8hp5</i>;</li>
+      <li>24 март 2006 - Мат Махони. Размер&mdash;18324887 байта, достигнат с алгоритъма <i>paq8f</i>.</li>
+    </ul>
+
+    <p>
+      Интересен е и алгоритъмът <i>cmix</i>, който постига размер 14838332 байта за <i>enwik8</i> и 115714367 байта за
+      <i>enwik9</i>. С такъв резултат <i>cmix</i> би бил първи, но не се вмества в изискванията за време и
+      памет&mdash;за <i>enwik9</i> са му нужни ~334 часа и ~25GiB оперативна памет<a href="#reference-compression-benchmark"><sup>[x]</sup></a>.
+      <br>TODO: Повече информация
+    </p>
+
+    <p>
+      Друг алгоритъм, който вече беше споменат е <i>nncp</i>. Въпреки че не постига толкова добри резултати, той все пак
+      успява да се доближи до тях. Причината да представлява интерес е, че в основата му седи LSTM рекурентна невронна
+      мрежа.
+      <br>TODO: Повече информация
+    </p>
+
+    <div>TODO: https://github.com/sebastianruder/NLP-progress</div>
 
     <h3>Забележки относно правилата</h3>
 
@@ -1165,6 +1193,10 @@ MathJax = {
       </li>
       <li id="reference-zipfs-law">
         Powers, David M W (1998). "Applications and explanations of Zipf's law". Association for Computational Linguistics: 151–160.
+      </li>
+      <li id="reference-compression-benchmark">
+        Mahoney, Matt (9 Mar. 2020). "Large Text Compression Benchmark".
+        http://mattmahoney.net/dc/text.html
       </li>
       <li id="reference-lstm">
         Sepp Hochreiter; Jürgen Schmidhuber (15 November 1997). "Long short-term memory".
