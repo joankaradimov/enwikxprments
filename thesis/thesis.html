@@ -263,7 +263,7 @@ jQuery(function ($) {
 
     <p>
       Необичайно в случая е, че избягването на свръх-нагаждането (overfitting) няма да бъде цел. Интересно е, че за
-      компресия чрез невронни мрежи може дори да бъде полезно<a href="#reference-overfitting-for-compression"><sup>[x]</sup></a>.
+      компресия чрез невронни мрежи може дори да бъде полезно<a href="#reference-overfitting-as-memorization"></a><a href="#reference-overfitting-for-compression"></a>.
       Друго нехарактерно е feature engineering-а [todo: превод], който се прилага върху данните.
       Този подход, необходим за много от алгоритмите за машинно самообучение, обикновено се заобиколя при невронните мрежи.
       Но в случая feature engineering-ът се налага и има паралели с някои подходи при класически алгоритми за компресия.
@@ -1251,6 +1251,27 @@ jQuery(function ($) {
 
     <h4>Свръх-нагаждане (overfitting)</h4>
 
+    <p>
+      Свръх-нагаждането е състояние, в което предвиждащи модели могат да се окажат след трениране.
+      В това състояние те успяват да предвиждат данни, с които са били тренирани, но губят предсказващата си способност
+      за данни, които виждат за пръв път. Проблемът е добре изследван и съществуват много подходи за избягването му.
+      Например: избиране на възможно най-прост модел; ограничаване на броя параметри на модела; ограничаване
+      на броя итерации при трениране на модела; регуляризация; вкарване на шум в набора от данни, и
+      други<a href="#reference-ml-bishop"></a><a href="#reference-avoid-overfitting"></a>.
+      Но основен подход е разделянето на данните на тренировъчна и на валидационна части. Тренирането се осъществява
+      върху тренировъчната част, а оценяването на модела&mdash;върху валидационната.
+    </p>
+
+    <p>
+      Но избягването на свръх-нагаждане би имало смисъл, ако се тренира модел, чиято цял е предвиждане на различни набори
+      данни. В разглеждания случай, моделът се тренира върху конкретни данни и се прилага единствено върху тях.
+      При нужда от компресия на друг набор данни, би следвало моделът да се тренира единствено върху него.
+      Поради тази причина наборът от данни не се разделя на тренировъчна и валидационна част и не се правят опити за
+      ограничаване на свръх-нагаждането. Още по-интересно е, че на свръх-нагаждането може да се гледа като
+      научаване на входните данни наизуст<a href="#reference-overfitting-as-memorization"></a> и това да се окаже
+      полезно за постигане на по-добра компресия<a href="#reference-overfitting-for-compression"></a>.
+    </p>
+
     <h3>Ентропийно кодиране</h3>
 
     <h4>Кодиране на Хъфман</h4>
@@ -1407,6 +1428,11 @@ jQuery(function ($) {
       <li id="reference-shannon-human-baseline">
         Shannon, Cluade E. (15 September 1950). “Prediction and Entropy of Printed English”, Bell Sys. Tech. J (3) p. 50-64, 1950.
       </li>
+      <li id="reference-overfitting-as-memorization">
+        Nicholas Carlini, Chang Liu, Úlfar Erlingsson, Jernej Kos, Dawn Song. (22 Feb 2018). "The Secret Sharer: Evaluating and Testing Unintended Memorization in Neural Networks".
+        arXiv:1802.08232
+      </li>
+
       <li id="reference-overfitting-for-compression">
         Egawa, Hiroki & Shibata, Yuichiro. (January 2019). "Storing and Compressing Video into Neural Networks by Overfitting".
         10.1007/978-3-319-93659-8_56.
@@ -1458,6 +1484,12 @@ jQuery(function ($) {
       <li id="reference-bwt-theory-and-practice">
         Manzini, Giovanni (18 August 1999). "The Burrows-Wheeler Transform: Theory and Practice".
         Mathematical Foundations of Computer Science 1999: 24th International Symposium, MFCS'99 Szklarska Poreba, Poland, September 6-10, 1999 Proceedings. Springer Science & Business Media.
+      </li>
+      <li id="reference-ml-bishop">
+        Bishop, Christopher M (2006). "Pattern Recognition and Machine Learning". Springer, ISBN: 9780387310732
+      </li>
+      <li id="reference-avoid-overfitting">
+        Shaeke Salman, Xiuwen Liu (19 Jan 2019). "Overfitting Mechanism and Avoidance in Deep Neural Networks". arXiv:1901.06566v1
       </li>
       <li id="reference-1">
         Shannon, Claude Elwood (July 1948). "A Mathematical Theory of Communication". Bell System Technical Journal. 27 (3): 379–423
