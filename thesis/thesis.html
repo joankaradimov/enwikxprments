@@ -67,6 +67,17 @@
       padding-bottom: 15px;
     }
 
+    .dataset-fields-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid black;
+      margin: 20px 0;
+    }
+    .dataset-fields-table tr { border: 1px solid black; }
+    .dataset-fields-table td { text-align: center; }
+    .dataset-fields-table tr:first-child { border-bottom: 4px double black; }
+    .dataset-fields-table td:first-child + td { border-left: 4px double black; }
+
     pre[class*="language-"] {
       border: none;
       overflow: hidden;
@@ -1099,6 +1110,139 @@ jQuery(function ($) {
 
     <h3>Предварителна обработка на данните</h3>
 
+    <p>
+      Целта на тази част от компресията е да се отделят голямата част от полетата от набора от данни и за обучението на
+      модела да се оставят единствено заглавието и текстовото съдържание от метаданните. За постигането на това, трябва
+      първо да се parse-не (todo: превод) XML набора от данни. Голяма част от данните са повтарящи се имена на етикети и
+      атрибути, които имат твърде структура. Достатъчно е да се запази реда на полетата, за да се възстанови оригиналното
+      XML съдържание в декомпресиращата програма. По този начин остават единствено данните в полетата, описани в глава
+      "4.3 Изследване на данните". Те могат грубо да бъдат интерпретирани като матрица във вид:
+
+      <table class="dataset-fields-table">
+        <tr>
+          <td></td>
+          <td>заглавия</td>
+          <td>идентификатори</td>
+          <td>...</td>
+          <td>автори</td>
+          <td>коментари</td>
+          <td>текстове</td>
+        </tr>
+        <tr>
+          <td>статия 1</td>
+          <td>заглавие 1</td>
+          <td>идентификатор 1</td>
+          <td>...</td>
+          <td>автор 1</td>
+          <td>коментар 1</td>
+          <td>текст 1</td>
+        </tr>
+        <tr>
+          <td>статия 2</td>
+          <td>заглавие 2</td>
+          <td>идентификатор 2</td>
+          <td>...</td>
+          <td>автор 2</td>
+          <td>коментар 2</td>
+          <td>текст 2</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="6">...</td>
+        </tr>
+        <tr>
+          <td>статия n</td>
+          <td>заглавие n</td>
+          <td>идентификатор n</td>
+          <td>...</td>
+          <td>автор n</td>
+          <td>коментар n</td>
+          <td>текст n</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="6">...</td>
+        </tr>
+      </table>
+
+      Обхождайки тези полета, ги срещаме първо от ляво надясно по колони, а след това от горе надолу по редове.
+      Интересно е да транспонираме тази матрица до вида:
+
+      <table class="dataset-fields-table">
+        <tr>
+          <td></td>
+          <td>статия 1</td>
+          <td>статия 2</td>
+          <td>...</td>
+          <td>статия n</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td>заглавия</td>
+          <td>заглавие 1</td>
+          <td>заглавие 2</td>
+          <td>...</td>
+          <td>заглавие n</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td>идентификатори</td>
+          <td>идентификатор 1</td>
+          <td>идентификатор 2</td>
+          <td>...</td>
+          <td>идентификатор n</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="2"></td>
+          <td>...</td>
+          <td></td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td>автори</td>
+          <td>автор 1</td>
+          <td>автор 2</td>
+          <td>...</td>
+          <td>автор n</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td>коментари</td>
+          <td>коментар 1</td>
+          <td>коментар 2</td>
+          <td>...</td>
+          <td>коментар n</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <td>текстове</td>
+          <td>текст 1</td>
+          <td>текст 2</td>
+          <td>...</td>
+          <td>текст n</td>
+          <td>...</td>
+        </tr>
+      </table>
+
+      Така еднотипни данни ще бъдат групирани заедно. На практика често ще има и последователности от нарастващи числа,
+      числа с близки стойности, както и подобни текстове. Групирането на подобни стойности заедно е един от известните
+      начини за постигане на компресия. Това е изследвано и обосновано от алгоритми като преобразуванието на
+      Бъроуз-Уилър<a href="#reference-bwt"><sup>[x]</sup></a><a href="#reference-bwt-theory-and-practice"><sup>[x]</sup></a>.
+    </p>
+
+    <p>
+      <div>Забележка:</div>
+      Свойство, което се губи в описания до тук подход, е възможността за on-the-fly (todo - превод) компресия.
+      Това се изразява във възможността да се компресира началото на данните, без да са налични всички данни до края.
+      Преобразуванието на Бъроуз-Уилър постига въпросното свойство, разглеждайки данните като последователност от блокове,
+      и пренареждайки данните единствено в рамките на един блок. Такъв подход би усложнил имплементация на предварителната
+      обработка, но вероятно би понижил изискванията за памет. Първото считаме на нежелано, а второто&mdash;за ненужно,
+      тъй като условията на Hutter Prize (todo - превод) по никакъв начин не налагат условието за on-the-fly
+      (todo - превод) компресия.
+    </p>
+
     <h3>Рекурентни невронни мрежи</h3>
 
     <h4>Класически подход и проблеми</h4>
@@ -1306,6 +1450,14 @@ jQuery(function ($) {
       <li id="reference-gru">
         Cho, Kyunghyun; van Merrienboer, Bart; Gulcehre, Caglar; Bahdanau, Dzmitry; Bougares, Fethi; Schwenk, Holger; Bengio, Yoshua (2014).
         "Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation". arXiv:1406.1078
+      </li>
+      <li id="reference-bwt">
+        M. Burrows and D.J. Wheeler, (10 May 1994). "A Block-sorting Lossless Data Compression Algorithm",
+        Technical Report 124, Digital Equipment Corporation
+      </li>
+      <li id="reference-bwt-theory-and-practice">
+        Manzini, Giovanni (18 August 1999). "The Burrows-Wheeler Transform: Theory and Practice".
+        Mathematical Foundations of Computer Science 1999: 24th International Symposium, MFCS'99 Szklarska Poreba, Poland, September 6-10, 1999 Proceedings. Springer Science & Business Media.
       </li>
       <li id="reference-1">
         Shannon, Claude Elwood (July 1948). "A Mathematical Theory of Communication". Bell System Technical Journal. 27 (3): 379–423
