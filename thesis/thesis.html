@@ -1245,6 +1245,55 @@ jQuery(function ($) {
 
     <h3>Рекурентни невронни мрежи</h3>
 
+    <p>
+      През 1974 г. Уилям Литъл разглежда вид изкуствени невронни мрежи, вариант на невронни мрежи с право разпространение
+      на сигнала, но със свойството да запазват някакво количество данни във вътрешно (скрито)
+      състояние<a href="#reference-persistent-states-little"></a>. През 1982 г. Джон Хопфийлд изследва свойствата им за
+      "генерализация, разпознаване, категоризация, коригиране на грешки и запомняне на времеви
+      последователности"<a href="#reference-hopfield"></a> и популяризира техен частен случай като мрежи на Хопфийлд.
+      В последствие, на базата на изследвания на Дейвид Румелхард<a href="#reference-rumelhart"></a>, се формулира
+      генералната идея за рекурентни невронни мрежи.
+    </p>
+
+    <p>
+      През 1997 г. е предложената архитектурата LSTM<a href="#reference-lstm"></a>, която през следващите десетилетия
+      получава множество подобрения и държи рекордите в широк диапазон от сфери.
+      <br>
+      TODO: приемливо ли е да изсипя всички тези reference-и от Wikipedia?
+      https://en.wikipedia.org/wiki/Long_short-term_memory#History
+      https://en.wikipedia.org/wiki/Recurrent_neural_network#LSTM
+      <br>
+      Чак в последните няколко години LSTM и вариантите му започват да отстъпват челните места в решенията някои
+      проблеми. Един от по-новите модели е Transformer (todo - превод)<a href="#reference-transformers"></a>.
+      При такъв модел се позволява обработването на текст в не-последователен ред&mdash;т.е. не е нужно думите
+      (или символите) да се обработват от ляво надясно или от дясно наляво. Въпреки че този подход е обещаващ за
+      обработка на естествени езици, негово приложение в тази дипломна работа няма да бъде търсено. Основна причина е
+      по-лесното и елегантно имплементиране на алгоритми за компресия, когато с данните се работи в последователен ред.
+    </p>
+
+    <p>
+      През 2014 г. е предложената GRU<a href="#reference-lstm"></a>
+      <br>
+      TODO
+    </p>
+
+    <p>
+      За целите на дипломната работа се разглеждат модели с LSTM и GRU слоеве. В допълнение на това се оценяват ползите
+      от допълнителни слоеве на входа и изхода на моделите. Общият вид, който ще се изследва е:
+    </p>
+
+    <ul>
+      <li>
+        embedding layer (todo - превод)
+      </li>
+      <li>
+        recurrent layers (todo - превод)
+      </li>
+      <li>
+        напълно свързан (dense) слой
+      </li>
+    </ul>
+
     <h4>Класически подход и проблеми</h4>
 
     <h4>Feature Engineering</h4>
@@ -1485,6 +1534,21 @@ jQuery(function ($) {
       <li id="reference-bwt-theory-and-practice">
         Manzini, Giovanni (18 August 1999). "The Burrows-Wheeler Transform: Theory and Practice".
         Mathematical Foundations of Computer Science 1999: 24th International Symposium, MFCS'99 Szklarska Poreba, Poland, September 6-10, 1999 Proceedings. Springer Science & Business Media.
+      </li>
+      <li id="reference-persistent-states-little">
+        Little, W. A. (1974). "The existence of persistent states in the brain". Math. Biosci., 19, 101-120.
+      </li>
+      <li id="reference-hopfield">
+        Hopfield, J. J. (1982). "Neural Networks and Physical Systems with Emergent Collective Computational abilities".
+        Proc. Natl. Acad. Sci. USA, 79, 2554-2558.
+      </li>
+      <li id="reference-rumelhart">
+        Williams, Ronald J.; Hinton, Geoffrey E.; Rumelhart, David E. (October 1986). "Learning representations by back-propagating errors".
+        Nature. 323 (6088): 533–536.
+      </li>
+      <li id="reference-transformers">
+        Polosukhin, Illia; Kaiser, Lukasz; Gomez, Aidan N.; Jones, Llion; Uszkoreit, Jakob; Parmar, Niki; Shazeer, Noam; Vaswani, Ashish (2017-06-12).
+        "Attention Is All You Need". arXiv:1706.03762
       </li>
       <li id="reference-ml-bishop">
         Bishop, Christopher M (2006). "Pattern Recognition and Machine Learning". Springer, ISBN: 9780387310732
