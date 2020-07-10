@@ -267,6 +267,7 @@ jQuery(function ($) {
           <li>Брой и размер на рекурентните слоеве</li>
           <li>Способност за наизустяване</li>
           <li>Способност за предсказване</li>
+          <li>Статистика на предсказанията</li>
         </ol>
       </li>
       <li>
@@ -2419,24 +2420,174 @@ X
       </li>
     </ul>
 
+    <h3>9.6 Статистика на предсказанията</h3>
+
+    <p>
+      В глава "9.5 Способност за предсказване" беше изследвана способността на модела да предсказва, абстрахирайки се от
+      реалните данни. В тази глава ще бъде изследвана способността за предсказване, но в контекста на конкретна статия.
+      За целта e избран предварително обучен модел със структура, описана на <i>фиг. 17</i>.
+    </p>
+
+    <div style="float: left; margin: 10px 30px 10px 0;">
+      <pre style="font-size: 0.45rem;">
+Model: "sequential"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+masking (Masking)            (384, 128)                0
+_________________________________________________________________
+embedding (Embedding)        (384, 128, 128)           32640
+_________________________________________________________________
+gru (GRU)                    (384, 128, 1280)          5414400
+_________________________________________________________________
+gru_1 (GRU)                  (384, 128, 1280)          9838080
+_________________________________________________________________
+dense (Dense)                (384, 128, 255)           326655
+=================================================================
+Total params: 15,611,775
+Trainable params: 15,611,775
+Non-trainable params: 0
+      </pre>
+      <i style="display: block; padding-left: 20px;">(фиг. 17)</i>
+    </div>
+
+    <p>
+      Моделът е обучен върху азбука от 72 букви и речник от 183 под-думи. Достига се компресия от приблизително 21%.
+      Тренирането е извършено върху <i>enwik8</i> в продължение на 115 епохи и около 13 часа.
+    </p>
+
+    <div style="clear:both;"></div>
+
+    <p>
+      Избрана е статия с дължина 1653 символа, след предварителната обработка. След кодирането с речника от под-думи,
+      дължината на статията е 1101 категории. Съдържанието на статията, след предварителната обработка, е:
+    </p>
+
+    <pre style="font-size: 0.6rem;">
+      <code class="language-wiki">
+=bernoulli's inequality=
+in [[mathematics]], '''bernoulli's inequality''' is an [[inequality]] that approximates [[exponentiation]]s of 1 X <i>x</i>.
+
+the inequality states that
+:<math>(1 X x)Xr \geq 1 X rx\!</math>
+for every [[integer]] <i>r</i> X 0 and every [[real number]] <i>x</i> X X1. if the exponent <i>r</i> is [[even number|even]], then the inequality is valid for ''all'' real numbers <i>x</i>. the strict version of the inequality reads
+:<math>(1 X x)Xr > 1 X rx\!</math>
+for every integer <i>r</i> X 2 and every real number <i>x</i> X X1 with <i>x</i> X 0.
+
+bernoulli's inequality is often used as the crucial step in the [[proof (math)|proof]] of other inequalities. it can itself be proved using [[mathematical induction]].
+
+the exponent <i>r</i> can be generalized to an arbitrary real number as follows: if <i>x</i> > X1, then
+:<math>(1 X x)Xr \geq 1 X rx\!</math>
+for <i>r</i> X 0 or <i>r</i> X 1, and
+:<math>(1 X x)Xr \leq 1 X rx\!</math>
+for 0 X <i>r</i> X 1.
+this generalization can be proved by comparing [[derivative]]s.
+again, the strict versions of these inequalities require <i>x</i> X 0 and <i>r</i> X 0, 1.
+
+== related inequalities ==
+the following inequality estimates the <i>r</i>-th power of 1 X <i>x</i> from the other side. for any real numbers <i>x</i>, <i>r</i> > 0, one has
+:<math>(1 X x)Xr < eX{rx},\!</math>
+where <i>e</i> = [[e (number)|2.718...]].
+this may be proved using the inequality (1 X 1/<i>k</i>)<sup><i>k</i></sup> < <i>e</i>.
+
+[[category:inequalities]]
+
+[[de:bernoullische ungleichung]]
+[[fr:inégalité de bernoulli]]
+[[it:diseguaglianza di bernoulli]]
+[[pl:nierXwnoX bernoulliego]]
+[[ru:X X]]
+[[zh:X]]
+      </code>
+    </pre>
+
+    <p>
+      От гледната точка на модела, статията е представена като последователност от категории, всяка от които е на една
+      измежду 1101 позиции. За всяка позиция може да бъде разгледана реалната категория, както и предсказанието на модела.
+      Предсказанията представляват вектор от 255 вероятности, чиято сума е 1. Ако тези вероятности бъдат пренаредени
+      в низходящ ред, можем да гледаме на тях като функция на плътността на някакво неизвестно дискретно статистическо
+      разпределение. На <i>фиг. 18</i> е изобразено точно това, разглеждайки предсказанията за първата позиция.
+      На <i>фиг. 19</i> е изобразена съответстващата му функция на разпределение.
+    </p>
+
+    <div style="display: inline-flex; margin: 20px 0;">
+      <div style="float: left;">
+        <img src="prediction-pdf-position-0.png">
+        <i style="display: block; padding-left: 30px;">(фиг. 18)</i>
+      </div>
+      <div style="float: left">
+        <img src="prediction-cdf-position-0.png">
+        <i style="display: block; padding-left: 30px;">(фиг. 19)</i>
+      </div>
+    </div>
+
+    <p>
+      Моментално прави впечатление приликата със зета разпределение (нормализирана версия на закона на Ципф).
+      Логично е да се провери, дали това поведение важи за други позиции. На <i>фиг. 20</i> с различни цветове са
+      изобразени функциите на разпределение позиция <i>i</i>, където i ∈ [1; 10]. А на <i>фиг. 21</i>&mdash; за позиция
+      <i>i</i>, където i ∈ [11; 20]
+    </p>
+
+    <div style="display: inline-flex; margin: 20px 0;">
+      <div style="float: left;">
+        <img src="prediction-cdf-positions-0-10.png">
+        <i style="display: block; padding-left: 30px;">(фиг. 20)</i>
+      </div>
+      <div style="float: left">
+        <img src="prediction-cdf-positions-10-20.png">
+        <i style="display: block; padding-left: 30px;">(фиг. 21)</i>
+      </div>
+    </div>
+
+    <p>
+      Изглежда свойството се запазва. В глава "4.3.2 Възможни символи" беше демонстрирано графично, че законът на Ципф
+      важи за първите няколко десетки символа&mdash;а този модел е обучен единствено с тях. По всичко личи, че
+      невронната мрежа се обучава да доближава статистическа дистрибуция.
+    </p>
+
+    <p>
+      <div>Забележка 1</div>
+      Важно е да се отбележи, че моделът не просто е научил разпределението на глобално ниво. Предсказанията, които
+      дава, зависят от контекста. В реда на нещата е моделът да предскаже зета разпределение за конкретна позиция, в
+      което най-вероятният символ е много малко вероятен на глобално ниво.
+    </p>
+
+    <p>
+      <div>Забележка 2</div>
+      Интересно е да се провери, дали такава статистическа зависимост наистина съществува във набора от данни&mdash;не
+      само на глобално ниво, а и при условие предшестващи символи.
+    </p>
+
+    <p>
+      <div>Забележка 3</div>
+      С такова поведение на практика е невъзможно за модела да даде оценки за два символи, които са едновременно
+      високи и близки. Това, обаче, би било възможно за ансамблов метод, използващ няколко рекурентни невронни мрежи.
+      Това дава обосновка и за по-добрите резултати, постигани от алгоритми, използващи компресия със смесване на контексти.
+    </p>
+
+    <p>
+      .......
+    </p>
+
+    На <i>(фиг. 19)</i> са изобразени
+
+    <div style="display: inline-flex;">
+      <div style="float: left;">
+        <img src="correct-prediction-chance-over-time.png">
+        <i style="display: block; padding-left: 30px;">(фиг. 22)</i>
+      </div>
+    </div>
+
+    <div>
+      <img src="correct-prediction-chance-sorted.png">
+      <img src="arcsine-cdf.png">
+      <img src="arcsine-pdf.png">
+    </div>
+
   </div>
 
   <div class="pages">
     <h2>10 Ентропийно кодиране</h2>
-
-    TODO: Разпределение на Парето:
-
-    <div>
-      <img src="prediction-pdf-position-0.png">
-      <img src="prediction-cdf-position-0.png">
-      <img src="prediction-cdf-positions-0-10.png">
-      <img src="prediction-cdf-positions-10-20.png">
-      <img src="correct-prediction-chance-over-time.png">
-      <img src="correct-prediction-chance-sorted.png">
-      <img src="arcsine-cdf.png">
-      <img src="arcsine-pdf.png">
-
-    </div>
 
     <h3>10.1 Кодиране на Хъфман</h3>
 
@@ -2530,8 +2681,8 @@ X
 
     <p>
       <div><b>Статистически анализ на полученият модел</b></div>
-      TODO ... на данните получени в глава "10 Ентропийно кодиране"...
-      разпределение на Парето; бета разпределение; аркуссинусово разпределение
+      В глава "9.6 Статистика на предсказанията" се показват някои интересни поведения на обучените модели. Те могат да
+      послужат като основа на по-обстоен статистически анализ, който да подскаже подходи за подобряване на компресията.
     </p>
 
     <p>
