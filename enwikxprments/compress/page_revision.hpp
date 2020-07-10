@@ -118,11 +118,13 @@ public:
         std::ofstream page_revisions_revision_timestamp_output("out/page_revisions_revision_timestamp", std::ios::binary);
         std::ofstream page_revisions_contributor_index_output("out/page_revisions_contributor_index", std::ios::binary);
         std::ofstream page_revisions_title_output("out/page_revisions_title", std::ios::binary);
+        std::ofstream page_revisions_revision_minor_output("out/page_revisions_revision_minor", std::ios::binary);
         std::ofstream page_revisions_comment_output("out/page_revisions_comment", std::ios::binary);
         std::ofstream page_revisions_text_output("out/page_revisions_text", std::ios::binary);
 
         for (auto page_revision : this->page_revisions) {
             page_revisions_title_output.write(page_revision.page_title.c_str(), page_revision.page_title.length() + 1);
+            page_revisions_revision_minor_output.write((char*)&page_revision.revision_minor, 1);
             page_revisions_comment_output.write(page_revision.revision_comment.c_str(), page_revision.revision_comment.length() + 1);
             page_revisions_text_output.write(page_revision.revision_text.c_str(), page_revision.revision_text.length() + 1);
 
