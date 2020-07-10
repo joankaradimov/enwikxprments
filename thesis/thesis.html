@@ -82,6 +82,15 @@
     .dataset-fields-table tr:first-child { border-bottom: 4px double black; }
     .dataset-fields-table td:first-child + td { border-left: 4px double black; }
 
+    .glossary-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid black;
+    }
+    .glossary-table th { border-bottom: 4px double black; }
+    .glossary-table th { border-left: 1px solid black; }
+    .glossary-table td { border-left: 1px solid black; }
+
     pre[class*="language-"] {
       border: none;
       overflow: hidden;
@@ -264,6 +273,101 @@ jQuery(function ($) {
       </li>
       <li>Библиография</li>
     </ol>
+  </div>
+
+  <div class="pages contents">
+    <h2>Речник на използваните понятия</h2>
+
+    <p>
+      <i>Таблица 1</i> представя речник на понятията, използвани в дипломната работа, за които липсва изрична дефиниция.
+    </p>
+
+    <table class="glossary-table">
+      <tr>
+        <th>Понятие</th>
+        <th>Описание</th>
+      </tr>
+      <tr>
+        <td>слой за влагане</td>
+        <td>
+          embedding layer
+        </td>
+      </tr>
+      <tr>
+        <td>рекурентен слой</td>
+        <td>
+          recurrent layer
+        </td>
+      </tr>
+      <tr>
+        <td>n-грами</td>
+        <td>
+          енторки
+        </td>
+      </tr>
+      <tr>
+        <td>маркиращ език</td>
+        <td>
+          markup language
+        </td>
+      </tr>
+      <tr>
+        <td>партиди от данни</td>
+        <td>
+          batch-ове
+        </td>
+      </tr>
+      <tr>
+        <td>компресия без загуби</td>
+        <td>
+          lossless компресия
+        </td>
+      </tr>
+      <tr>
+        <td>компресия със смесване на контексти</td>
+        <td>
+          context mixing
+        </td>
+      </tr>
+      <tr>
+        <td>синтактичен анализ</td>
+        <td>
+          parse-не
+        </td>
+      </tr>
+      <tr>
+        <td>единична точност</td>
+        <td>
+          single precision
+        </td>
+      </tr>
+      <tr>
+        <td>свойство</td>
+        <td>
+          feature
+        </td>
+      </tr>
+      <tr>
+        <td>извличане на свойства</td>
+        <td>
+          feature extraction
+        </td>
+      </tr>
+      <tr>
+        <td>обработване на свойства</td>
+        <td>
+          feature engineering
+        </td>
+      </tr>
+      <tr>
+        <td>категория</td>
+        <td>
+          категорийните данни са добър кандидат за свойства при обучение
+        </td>
+      </tr>
+    </table>
+
+    <p><i>таблица 1</i></p>
   </div>
 
   <div class="pages">
