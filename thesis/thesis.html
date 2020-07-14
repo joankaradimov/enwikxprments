@@ -55,11 +55,43 @@
       }
     }
 
-    .contents ol { counter-reset: item; }
+    .contents > ol { padding-left: 0; }
+    .contents ol {
+      counter-reset: item;
+    }
     .contents ol > li { display: block; }
-    .contents ol > li:before {
+    .contents ol > li > span:first-child::before {
       content: counters(item, ".") " ";
       counter-increment: item;
+      background: white;
+    }
+
+    .contents ol {
+      max-width: 40em;
+      overflow-x: hidden;
+    }
+
+    .contents ol li:before {
+      float: left;
+      width: 0;
+      white-space: nowrap;
+      content:
+      ". . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . ";
+    }
+
+    .contents ol span:first-child {
+      padding-right: 0.33em;
+      background: white;
+    }
+
+    .contents ol span + span {
+      position: relative;
+      float: right;
+      padding-left: 0.33em;
+      background: white;
     }
 
     .references { font-size: 0.8rem; }
@@ -192,100 +224,100 @@ jQuery(function ($) {
   <div class="pages contents">
     <h2>1 Съдържание</h2>
     <ol>
-      <li>Съдържание</li>
+      <li><span>Съдържание</span> <span>3</span></li>
       <li>
-        Въведение
+        <span>Въведение</span> <span>5</span>
         <ol>
-          <li>Математическо моделиране на интелекта</li>
-          <li>Предмет на дипломната работа</li>
-          <li>Цел на дипломната работа</li>
+          <li><span>Математическо моделиране на интелекта</span> <span>5</span></li>
+          <li><span>Предмет на дипломната работа</span> <span>6</span></li>
+          <li><span>Цел на дипломната работа</span> <span>8</span></li>
         </ol>
       </li>
       <li>
-        Компресията като мярка на интелект
+        <span>Компресията като мярка на интелект</span> <span>10</span>
         <ol>
-          <li>Ентропия на Шанън и оптималната компресия</li>
-          <li>Сложност по Колмогоров и универсална индукция на Соломонов</li>
-          <li>AIXI и AIXItl</li>
-          <li>Теорема за най-бърз и най-кратък алгоритъм</li>
+          <li><span>Ентропия на Шанън и оптималната компресия</span> <span>x</span></li>
+          <li><span>Сложност по Колмогоров и универсална индукция на Соломонов</span> <span>x</span></li>
+          <li><span>AIXI и AIXItl</span> <span>x</span></li>
+          <li><span>Теорема за най-бърз и най-кратък алгоритъм</span> <span>x</span></li>
         </ol>
       </li>
       <li>
-        Наборите от данни <i>enwikX</i>
+        <span>Наборите от данни <i>enwikX</i></span> <span>x</span>
         <ol>
-          <li>MediaWiki page export format</li>
-          <li>Wikitext</li>
+          <li><span>MediaWiki page export format</span> <span>x</span></li>
+          <li><span>Wikitext</span> <span>x</span></li>
           <li>
-            Изследване на данните
+            <span>Изследване на данните</span> <span>x</span>
             <ol>
-              <li>Статии</li>
-              <li>Възможни символи</li>
-              <li>Малки и големи букви</li>
-              <li>Заглавия</li>
-              <li>Автори</li>
-              <li>Дати на създаване</li>
+              <li><span>Статии</span> <span>x</span></li>
+              <li><span>Възможни символи</span> <span>x</span></li>
+              <li><span>Малки и големи букви</span> <span>x</span></li>
+              <li><span>Заглавия</span> <span>x</span></li>
+              <li><span>Автори</span> <span>x</span></li>
+              <li><span>Дати на създаване</span> <span>x</span></li>
             </ol>
           </li>
         </ol>
       </li>
       <li>
-        Приз на Хътър
+        <span>Приз на Хътър</span> <span>x</span>
         <ol>
-          <li>Текущи най-добри резултати</li>
-          <li>Забележки относно правилата</li>
+          <li><span>Текущи най-добри резултати</span> <span>x</span></li>
+          <li><span>Забележки относно правилата</span> <span>x</span></li>
         </ol>
       </li>
       <li>
-        Предложен подход за компресия на наборите от данни <i>enwikX</i>
+        <span>Предложен подход за компресия на наборите от данни <i>enwikX</i></span> <span>x</span>
       </li>
       <li>
-        Предварителна обработка на данните
+        <span>Предварителна обработка на данните</span> <span>x</span>
         <ol>
-          <li>Предварителна обработка на метаданни</li>
-          <li>Предварителна обработка на текст</li>
+          <li><span>Предварителна обработка на метаданни</span> <span>x</span></li>
+          <li><span>Предварителна обработка на текст</span> <span>x</span></li>
         </ol>
       </li>
       <li>
-        Рекурентни невронни мрежи
+        <span>Рекурентни невронни мрежи</span> <span>x</span>
         <ol>
-          <li>Класически подход и проблеми</li>
+          <li><span>Класически подход и проблеми</span> <span>x</span></li>
           <li>
-            Обработка на свойства (feature engineering)
+            <span>Обработка на свойства (feature engineering)</span> <span>x</span>
             <ol>
-              <li>Размер на азбуката</li>
-              <li>Размер на речник от под-думи</li>
+              <li><span>Размер на азбуката</span> <span>x</span></li>
+              <li><span>Размер на речник от под-думи</span> <span>x</span></li>
             </ol>
           </li>
-          <li>Свръх-нагаждане (overfitting)</li>
+          <li><span>Свръх-нагаждане (overfitting)</span> <span>x</span></li>
         </ol>
       </li>
       <li>
-        Провеждане на експерименти и анализ на резултатите
+        <span>Провеждане на експерименти и анализ на резултатите</span> <span>x</span>
         <ol>
-          <li>Брой на категориите</li>
-          <li>LSTM срещу GRU</li>
-          <li>Способност за наизустяване</li>
-          <li>Способност за предсказване</li>
-          <li>Статистика на предсказанията</li>
-          <li>Брой и размер на рекурентните слоеве</li>
+          <li><span>Брой на категориите</span> <span>x</span></li>
+          <li><span>LSTM срещу GRU</span> <span>x</span></li>
+          <li><span>Способност за наизустяване</span> <span>x</span></li>
+          <li><span>Способност за предсказване</span> <span>x</span></li>
+          <li><span>Статистика на предсказанията</span> <span>x</span></li>
+          <li><span>Брой и размер на рекурентните слоеве</span> <span>x</span></li>
         </ol>
       </li>
       <li>
-        Ентропийно кодиране
+        <span>Ентропийно кодиране</span> <span>x</span>
         <ol>
-          <li>Кодиране на Хъфман</li>
-          <li>Аритметично кодиране</li>
+          <li><span>Кодиране на Хъфман</span> <span>x</span></li>
+          <li><span>Аритметично кодиране</span> <span>x</span></li>
         </ol>
       </li>
-      <li>Методи и материали</li>
+      <li><span>Методи и материали</span> <span>x</span></li>
       <li>
-        Заключение
+        <span>Заключение</span> <span>x</span>
         <ol>
-          <li>Резултати и дискусия</li>
-          <li>Бъдещи цели</li>
+          <li><span>Резултати и дискусия</span> <span>x</span></li>
+          <li><span>Бъдещи цели</span> <span>x</span></li>
         </ol>
       </li>
-      <li>Библиография</li>
+      <li><span>Библиография</span> <span>x</span></li>
     </ol>
   </div>
 
